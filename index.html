@@ -98,15 +98,25 @@
     .dev-badge {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       padding: 7px 14px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-main);
       box-shadow: 0 4px 14px var(--shadow-color);
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.2s, background 0.2s;
+    }
+    .dev-badge:hover {
+      border-color: #5b68f6;
+      background: var(--sec-btn-hover);
+      transform: translateY(-1px);
+    }
+    .dev-badge:active {
+      transform: scale(0.96);
     }
     .pulse-dot {
       width: 7px;
@@ -154,8 +164,6 @@
       contain: content;
       transition: background 0.25s ease, border-color 0.25s ease;
     }
-
-    /* Box Top Controls: Nav Arrows & Cancel/X */
     .card-top-bar {
       display: flex;
       align-items: center;
@@ -273,7 +281,6 @@
       margin-bottom: 16px;
       text-align: center;
     }
-
     .primary-btn {
       width: 100%;
       background: #5b68f6;
@@ -594,6 +601,173 @@
       color: var(--text-muted);
       flex-shrink: 0;
     }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 16px;
+      animation: modalFadeIn 0.2s ease;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 390px;
+      padding: 24px 22px;
+      box-shadow: 0 25px 60px var(--shadow-color);
+      animation: modalScaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: left;
+    }
+    @keyframes modalScaleUp {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 16px rgba(91, 104, 246, 0.35);
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+    .modal-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .modal-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--sec-btn-bg);
+      border: 1px solid var(--sec-btn-border);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      transition: background 0.15s, color 0.15s;
+    }
+    .modal-close-btn:hover {
+      background: var(--sec-btn-hover);
+      color: var(--text-main);
+    }
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .dev-detail-row {
+      background: var(--sub-box-bg);
+      border: 1px solid var(--sub-box-border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .detail-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+    }
+    .detail-val-strong {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .detail-val {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+    .email-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .detail-email-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: #5b68f6;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .detail-email-link:hover {
+      text-decoration: underline;
+    }
+    .copy-email-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 9px;
+      background: var(--sec-btn-bg);
+      border: 1px solid var(--sec-btn-border);
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .copy-email-btn:hover {
+      background: var(--sec-btn-hover);
+    }
+    .dev-tech-badge {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 2px 4px;
+    }
+    .tech-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      flex-shrink: 0;
+    }
     .hidden {
       display: none !important;
     }
@@ -615,12 +789,16 @@
   </style>
 </head>
 <body>
-  <!-- Corner Left: Developer Info -->
+  <!-- Corner Left: Developer Info Button (Opens Developer Profile) -->
   <div class="corner-dev">
-    <div class="dev-badge">
+    <button class="dev-badge" onclick="openDevModal()" title="Developer Options & Details" aria-label="Developer Profile">
       <span class="pulse-dot"></span>
-      <span>DropLy P2P • Direct</span>
-    </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span>Developer Info</span>
+    </button>
   </div>
 
   <!-- Corner Right: Day/Night Theme -->
@@ -643,9 +821,9 @@
     </button>
   </div>
 
-  <!-- Main Box -->
+  <!-- Main Application Card -->
   <div class="card">
-    <!-- Top Bar: Navigation array/arrow buttons & Cancel/X button -->
+    <!-- Top Bar: Navigation arrows & Cancel/Disconnect icon -->
     <div class="card-top-bar">
       <div class="nav-arrow-group">
         <button id="nav-btn-back" class="icon-square-btn" onclick="navigateBack()" title="Back">&#8592;</button>
@@ -673,7 +851,7 @@
       <h1 class="brand-name">DropLy</h1>
       <p class="tagline">Fast direct P2P transfer between devices.</p>
 
-      <!-- Home Immediate Drag & Drop Box -->
+      <!-- Immediate Home Drag-and-Drop Box -->
       <div id="home-drop-zone" class="drop-zone" onclick="document.getElementById('hidden-file-input').click()">
         <svg class="drop-zone-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -753,7 +931,7 @@
           <div class="drop-zone-sub">or click to browse files</div>
         </div>
         <input type="file" id="transfer-file-input" multiple style="display: none;" onchange="onTransferFilesPicked(event)">
-        <!-- Number of selected files shown below the box -->
+        <!-- Exact count of selected files shown below the box -->
         <div id="transfer-files-count" class="selected-files-count">0 files selected</div>
         <button id="btn-start-transfer" class="primary-btn" onclick="triggerTransferStart()">
           Send Selected Files (Enter)
@@ -812,6 +990,61 @@
     </div>
   </div>
 
+  <div id="dev-modal" class="modal-overlay hidden" onclick="onDevModalOverlayClick(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-avatar">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title">Developer Options</h3>
+            <span class="modal-sub">DropLy P2P • Direct Transfer</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeDevModal()" title="Close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="dev-detail-row">
+          <span class="detail-label">Developed By</span>
+          <span class="detail-val-strong">Mahfuz Alam Joy</span>
+        </div>
+
+        <div class="dev-detail-row">
+          <span class="detail-label">Current Studies</span>
+          <span class="detail-val">Studying B.Sc. in Textile Engineering</span>
+        </div>
+
+        <div class="dev-detail-row">
+          <span class="detail-label">Email Address</span>
+          <div class="email-action-row">
+            <a href="mailto:mahfuzalamjoy56@gmail.com" class="detail-email-link">mahfuzalamjoy56@gmail.com</a>
+            <button class="copy-email-btn" onclick="copyEmailToClipboard()" title="Copy Email">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="dev-tech-badge">
+          <span class="tech-dot"></span>
+          <span>WebRTC P2P Engine • Auto-Resume Enabled • No Middle Server</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="secondary-btn" style="margin-bottom: 0;" onclick="closeDevModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const PEER_CONFIG = {
       config: {
@@ -851,9 +1084,9 @@
     const FILE_ACK_TIMEOUT_MS = 12000;
     const PROGRESS_THROTTLE_MS = 100;
 
-    const MAX_RECONNECT_ATTEMPTS = 5;
-    const RECONNECT_DELAYS_MS = [1000, 2000, 4000, 6000, 8000];
-    const SENDER_RECONNECT_WINDOW_MS = 30000;
+    const MAX_RECONNECT_ATTEMPTS = 8;
+    const RECONNECT_DELAYS_MS = [800, 1500, 2500, 4000, 6000, 8000, 10000, 12000];
+    const SENDER_RECONNECT_WINDOW_MS = 45000;
 
     let peer = null;
     let conn = null;
@@ -869,6 +1102,13 @@
     let reconnectGiveUpTimer = null;
     let hasConnectedOnce = false;
     let batchFullyDone = false;
+
+    // Auto-Resume Session Engine State
+    let currentSendOffset = 0;
+    let resumeState = {
+      pendingResumeResolve: null,
+      resumeTimeoutTimer: null
+    };
 
     // Files queues & selection
     let stagedFiles = [];
@@ -907,6 +1147,7 @@
     function clearReconnectTimers() {
       if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
       if (reconnectGiveUpTimer) { clearTimeout(reconnectGiveUpTimer); reconnectGiveUpTimer = null; }
+      if (resumeState.resumeTimeoutTimer) { clearTimeout(resumeState.resumeTimeoutTimer); resumeState.resumeTimeoutTimer = null; }
     }
 
     let els = {};
@@ -942,7 +1183,8 @@
         transferFileInput: document.getElementById('transfer-file-input'),
         btnStartTransfer: document.getElementById('btn-start-transfer'),
         navBtnBack: document.getElementById('nav-btn-back'),
-        navBtnFwd: document.getElementById('nav-btn-fwd')
+        navBtnFwd: document.getElementById('nav-btn-fwd'),
+        devModal: document.getElementById('dev-modal')
       };
     }
 
@@ -1120,6 +1362,27 @@
       }
     }
 
+    function openDevModal() {
+      const m = els.devModal || document.getElementById('dev-modal');
+      if (m) m.classList.remove('hidden');
+    }
+
+    function closeDevModal() {
+      const m = els.devModal || document.getElementById('dev-modal');
+      if (m) m.classList.add('hidden');
+    }
+
+    function onDevModalOverlayClick(event) {
+      if (event.target.id === 'dev-modal') {
+        closeDevModal();
+      }
+    }
+
+    function copyEmailToClipboard() {
+      fallbackCopy('mahfuzalamjoy56@gmail.com');
+      showToast('Email copied: mahfuzalamjoy56@gmail.com');
+    }
+
     function toggleTheme() {
       const body = document.body;
       const isLight = body.classList.toggle('light-theme');
@@ -1157,6 +1420,11 @@
       hasConnectedOnce = false;
       batchFullyDone = false;
 
+      if (resumeState.pendingResumeResolve) {
+        resumeState.pendingResumeResolve(false);
+        resumeState.pendingResumeResolve = null;
+      }
+
       if (conn && conn.open) {
         try { conn.send(JSON.stringify({ type: 'TRANSFER_CANCEL' })); } catch (_) {}
       }
@@ -1174,6 +1442,7 @@
       fileQueue = [];
       currentFileIndex = 0;
       currentBatchTotal = 0;
+      currentSendOffset = 0;
       receiverMeta = null;
       receiverChunks = [];
       receiverBytes = 0;
@@ -1262,18 +1531,16 @@
       });
 
       peer.on('connection', (c) => {
-        if (conn && conn.open) {
+        if (conn && conn.open && !isReconnecting) {
           try { c.close(); } catch (_) {}
           return;
         }
-        const wasReconnecting = isReconnecting;
         clearReconnectTimers();
-        isReconnecting = false;
+        if (conn && conn !== c) {
+          try { conn.close(); } catch (_) {}
+        }
         conn = c;
         bindPeerConnection(conn);
-        if (wasReconnecting) {
-          showToast('Reconnected. Resuming transfer...');
-        }
       });
     }
 
@@ -1342,8 +1609,6 @@
           if (e.key === 'Backspace' && !e.target.value && idx > 0) {
             inputs[idx - 1].focus();
           } else if (e.key === 'Enter') {
-            e.preventDefault();
-            e.stopPropagation();
             checkOtpFilled();
             if (els.btnConnect && !els.btnConnect.disabled) {
               connectWithCode();
@@ -1447,20 +1712,51 @@
     }
 
     function bindPeerConnection(c) {
-      c.on('open', () => {
+      const handleOpen = () => {
         if (isCancelled) return;
         clearReconnectTimers();
         hasConnectedOnce = true;
         reconnectAttempts = 0;
-        isReconnecting = false;
         negotiateChunkSize(c);
         const dc = c.dataChannel || c._dc;
         if (dc) {
           try { dc.binaryType = 'arraybuffer'; } catch (_) {}
         }
-        // Both parties transition directly to the Transfer Screen upon connecting
+
+        if (isReconnecting) {
+          // Auto-Resume link restored
+          if (isSender) {
+            showToast('Reconnected! Negotiating resume...');
+            uiState.status = 'Reconnected! Resuming transfer...';
+            scheduleUiUpdate();
+
+            if (fileQueue.length > 0 && currentFileIndex < fileQueue.length) {
+              const curFile = fileQueue[currentFileIndex];
+              try {
+                c.send(JSON.stringify({
+                  type: 'RESUME_CHECK',
+                  fileIndex: currentFileIndex,
+                  fileName: curFile.name,
+                  fileSize: curFile.size
+                }));
+              } catch (_) {}
+            }
+          } else {
+            isReconnecting = false;
+            showToast('Reconnected to sender. Resuming...');
+          }
+          return;
+        }
+
+        // Fresh connection: move together to Transfer Screen
         moveToTransferScreen();
-      });
+      };
+
+      if (c.open) {
+        handleOpen();
+      } else {
+        c.on('open', handleOpen);
+      }
 
       c.on('data', (data) => {
         if (isCancelled) return;
@@ -1509,6 +1805,59 @@
               receiverBatchIndex,
               receiverBatchCount
             );
+            return;
+          }
+
+          // Resume handshake: Sender checks how much data the receiver has
+          if (msg.type === 'RESUME_CHECK') {
+            isReconnecting = false;
+            const canResume = receiverMeta &&
+                              receiverMeta.name === msg.fileName &&
+                              receiverMeta.size === msg.fileSize &&
+                              receiverBatchIndex === (msg.fileIndex + 1);
+
+            const validOffset = canResume ? receiverBytes : 0;
+            if (!canResume) {
+              receiverChunks = [];
+              receiverBytes = 0;
+              receiverMeta = {
+                name: msg.fileName,
+                size: msg.fileSize,
+                mime: 'application/octet-stream'
+              };
+              receiverBatchIndex = msg.fileIndex + 1;
+            }
+
+            try {
+              c.send(JSON.stringify({
+                type: 'RESUME_ACK',
+                fileIndex: msg.fileIndex,
+                offset: validOffset
+              }));
+            } catch (_) {}
+
+            uiState.status = validOffset > 0
+              ? `Resumed from ${formatBytes(validOffset)}`
+              : 'Resuming transfer...';
+            scheduleUiUpdate();
+            return;
+          }
+
+          // Resume handshake: Sender receives verified resume offset
+          if (msg.type === 'RESUME_ACK') {
+            isReconnecting = false;
+            const resumeOffset = Math.min(msg.offset || 0, uiState.total);
+            currentSendOffset = resumeOffset;
+            uiState.transferred = resumeOffset;
+            uiState.status = resumeOffset > 0
+              ? `Resumed from ${formatBytes(resumeOffset)}`
+              : 'Sending file...';
+            scheduleUiUpdate();
+
+            if (resumeState.pendingResumeResolve) {
+              resumeState.pendingResumeResolve(true);
+              resumeState.pendingResumeResolve = null;
+            }
             return;
           }
 
@@ -1596,30 +1945,33 @@
 
     function handleConnectionDrop() {
       if (isCancelled || batchFullyDone || isReconnecting) return;
+      isReconnecting = true;
+      resetSpeedMeter();
+
       if (isSender) {
-        isReconnecting = true;
-        uiState.status = 'Connection lost. Waiting to reconnect...';
+        uiState.status = 'Connection interrupted. Waiting to resume...';
         scheduleUiUpdate();
         showToast('Connection interrupted. Waiting for device...');
         clearReconnectTimers();
+
         reconnectGiveUpTimer = setTimeout(() => {
           if (isReconnecting && !isCancelled) {
-            showToast('Could not reconnect in time.');
+            showToast('Transfer timed out due to disconnection.');
             cancelAndReset();
           }
         }, SENDER_RECONNECT_WINDOW_MS);
       } else {
         if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-          showToast('Connection lost.');
+          showToast('Connection lost. Please restart.');
           cancelAndReset();
           return;
         }
-        isReconnecting = true;
         reconnectAttempts++;
         const delay = RECONNECT_DELAYS_MS[Math.min(reconnectAttempts - 1, RECONNECT_DELAYS_MS.length - 1)];
-        uiState.status = `Reconnecting (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})...`;
+        uiState.status = `Reconnecting & resuming (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})...`;
         scheduleUiUpdate();
         clearReconnectTimers();
+
         reconnectTimer = setTimeout(() => {
           if (isCancelled || !peer || peer.destroyed) return;
           try {
@@ -1780,20 +2132,34 @@
       });
     }
 
+    function waitForResume() {
+      return new Promise((resolve) => {
+        resumeState.pendingResumeResolve = resolve;
+        if (resumeState.resumeTimeoutTimer) clearTimeout(resumeState.resumeTimeoutTimer);
+        resumeState.resumeTimeoutTimer = setTimeout(() => {
+          if (resumeState.pendingResumeResolve) {
+            resumeState.pendingResumeResolve(false);
+            resumeState.pendingResumeResolve = null;
+          }
+        }, SENDER_RECONNECT_WINDOW_MS);
+      });
+    }
+
     async function sendSingleFile(file) {
       if (!conn || !conn.open) return false;
 
-      const dc = conn.dataChannel || conn._dc;
+      let dc = conn.dataChannel || conn._dc;
       if (dc) {
         dc.bufferedAmountLowThreshold = LOW_WATER_MARK;
         try { dc.binaryType = 'arraybuffer'; } catch (_) {}
       }
-      const shouldAbort = () => isCancelled || !conn || !conn.open;
+      const shouldAbort = () => isCancelled;
 
       let ackResolveFn;
       const ackPromise = new Promise((res) => { ackResolveFn = res; });
       pendingFileAckResolve = ackResolveFn;
 
+      currentSendOffset = 0;
       try {
         conn.send(JSON.stringify({
           type: 'FILE_START',
@@ -1813,33 +2179,59 @@
       resetSpeedMeter();
       scheduleUiUpdate();
 
-      let offset = 0;
-      while (offset < file.size) {
+      while (currentSendOffset < file.size) {
         if (shouldAbort()) { pendingFileAckResolve = null; return false; }
+
+        // Auto-Resume trigger if link interrupted mid-transfer
+        if (!conn || !conn.open || isReconnecting) {
+          uiState.status = 'Connection lost. Waiting to resume...';
+          scheduleUiUpdate();
+
+          const reconnected = await waitForResume();
+          if (!reconnected || shouldAbort()) {
+            pendingFileAckResolve = null;
+            return false;
+          }
+
+          dc = conn.dataChannel || conn._dc;
+          if (dc) {
+            dc.bufferedAmountLowThreshold = LOW_WATER_MARK;
+            try { dc.binaryType = 'arraybuffer'; } catch (_) {}
+          }
+          if (currentSendOffset >= file.size) break;
+        }
 
         if (dc && dc.bufferedAmount >= HIGH_WATER_MARK) {
           await waitForDrain(dc, shouldAbort);
           if (shouldAbort()) { pendingFileAckResolve = null; return false; }
           if (dc.bufferedAmount >= HIGH_WATER_MARK) {
-            pendingFileAckResolve = null;
-            try { conn.close(); } catch (_) {}
-            return false;
+            if (conn) {
+              try { conn.close(); } catch (_) {}
+            }
+            continue;
           }
         }
 
-        const end = Math.min(offset + CHUNK_SIZE, file.size);
-        const slice = file.slice(offset, end);
-        const buffer = await slice.arrayBuffer();
+        const end = Math.min(currentSendOffset + CHUNK_SIZE, file.size);
+        const slice = file.slice(currentSendOffset, end);
+        let buffer;
+        try {
+          buffer = await slice.arrayBuffer();
+        } catch (_) {
+          pendingFileAckResolve = null;
+          return false;
+        }
 
         if (shouldAbort()) { pendingFileAckResolve = null; return false; }
 
         try {
           conn.send(buffer);
+          currentSendOffset = end;
         } catch (_) {
-          pendingFileAckResolve = null;
-          return false;
+          isReconnecting = true;
+          handleConnectionDrop();
+          continue;
         }
-        offset = end;
       }
 
       if (shouldAbort()) { pendingFileAckResolve = null; return false; }
@@ -1847,8 +2239,13 @@
       try {
         conn.send(JSON.stringify({ type: 'FILE_END' }));
       } catch (_) {
-        pendingFileAckResolve = null;
-        return false;
+        const reconnected = await waitForResume();
+        if (reconnected && conn && conn.open) {
+          try { conn.send(JSON.stringify({ type: 'FILE_END' })); } catch (_) {}
+        } else {
+          pendingFileAckResolve = null;
+          return false;
+        }
       }
 
       await Promise.race([
@@ -1927,6 +2324,12 @@
       const activeEl = document.activeElement;
       const isInputFocused = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
 
+      // Escape: Close developer modal
+      if (e.key === 'Escape') {
+        closeDevModal();
+        return;
+      }
+
       // Backspace: Disconnect and return home unless typing in an input
       if (e.key === 'Backspace' && !isInputFocused) {
         e.preventDefault();
@@ -1993,12 +2396,12 @@
       initDomElements();
       loadSavedTheme();
 
-      // Home drag and drop: immediately selects files and advances to connection screen
+      // Home drag-and-drop: selects files immediately and advances to connection screen
       setupDragAndDrop('home-drop-zone', (files) => {
         handleHomeFilesSelected(files);
       });
 
-      // Transfer screen drag and drop: accepts multiple files
+      // Transfer screen drag-and-drop: accepts multiple files
       setupDragAndDrop('transfer-drop-zone', (files) => {
         transferScreenFiles = files;
         updateTransferFileCount();
