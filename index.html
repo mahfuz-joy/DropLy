@@ -415,11 +415,267 @@
     .hidden {
       display: none !important;
     }
+
+    /* ---- Drag & Drop ---- */
+    .drop-hint {
+      font-size: 11px;
+      color: #4b5875;
+      margin-top: -8px;
+      margin-bottom: 16px;
+    }
+    .card.drag-over {
+      border-color: #5b68f6;
+      box-shadow: 0 0 0 3px rgba(91, 104, 246, 0.35), 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+    .drag-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 14, 20, 0.94);
+      border: 2px dashed #5b68f6;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+    .drag-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drag-overlay svg {
+      color: #5b68f6;
+    }
+    .drag-overlay span {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    /* ---- Corner Controls (Theme + Dev Info) ---- */
+    .corner-controls {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      gap: 8px;
+      z-index: 60;
+    }
+    .corner-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #1b2232;
+      border: 1px solid #28344c;
+      color: #8b9bb4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .corner-btn:hover {
+      background: #232d42;
+      color: #ffffff;
+    }
+    .corner-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+    .icon-sun { display: none; }
+    body.light-theme .icon-moon { display: none; }
+    body.light-theme .icon-sun { display: flex; }
+
+    /* ---- Developer Info Modal ---- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      padding: 16px;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      background: #141923;
+      border: 1px solid #1e2638;
+      border-radius: 20px;
+      padding: 26px 22px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+    .modal-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .modal-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+    .modal-role {
+      font-size: 12px;
+      color: #7b8a9e;
+      margin-bottom: 18px;
+    }
+    .modal-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0d1118;
+      border: 1px solid #1a2230;
+      border-radius: 12px;
+      padding: 11px 12px;
+      margin-bottom: 10px;
+      text-align: left;
+      font-size: 13px;
+      color: #e2e8f0;
+      word-break: break-all;
+      text-decoration: none;
+    }
+    .modal-row svg {
+      color: #5b68f6;
+      flex-shrink: 0;
+    }
+    .modal-close-btn {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    /* ---- Light Theme ---- */
+    body.light-theme {
+      background-color: #eef1f8;
+      color: #111827;
+    }
+    body.light-theme .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    }
+    body.light-theme .brand-name { color: #0f172a; }
+    body.light-theme .tagline { color: #64748b; }
+    body.light-theme .secondary-btn {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #dbe2ec;
+    }
+    body.light-theme .secondary-btn:hover { background: #e6ebf3; }
+    body.light-theme .footer-note { color: #94a3b8; }
+    body.light-theme .drop-hint { color: #94a3b8; }
+    body.light-theme .back-btn { color: #64748b; }
+    body.light-theme .header-title { color: #64748b; }
+    body.light-theme .code-display-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    body.light-theme #display-code { color: #0f172a; }
+    body.light-theme .action-btn-outline {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #dbe2ec;
+    }
+    body.light-theme .cancel-btn {
+      border: 1px solid #fecaca;
+    }
+    body.light-theme .input-instruction { color: #64748b; }
+    body.light-theme .otp-input {
+      background: #f8fafc;
+      border: 1px solid #dbe2ec;
+      color: #0f172a;
+    }
+    body.light-theme .file-meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    body.light-theme .file-icon-box { background: #eef0ff; }
+    body.light-theme .file-name-text { color: #0f172a; }
+    body.light-theme .file-size-text { color: #64748b; }
+    body.light-theme .transfer-hud {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    body.light-theme .progress-bar-bg { background: #e2e8f0; }
+    body.light-theme .progress-info { color: #1e293b; }
+    body.light-theme .toast-msg {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #1e293b;
+    }
+    body.light-theme .queue-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    body.light-theme .queue-item-name { color: #1e293b; }
+    body.light-theme .queue-item-size { color: #64748b; }
+    body.light-theme #completion-sub { color: #64748b !important; }
+    body.light-theme .corner-btn {
+      background: #f1f5f9;
+      border: 1px solid #dbe2ec;
+      color: #475569;
+    }
+    body.light-theme .corner-btn:hover { background: #e6ebf3; color: #0f172a; }
+    body.light-theme .modal-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+    }
+    body.light-theme .modal-name { color: #0f172a; }
+    body.light-theme .modal-role { color: #64748b; }
+    body.light-theme .modal-row {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+    body.light-theme .drag-overlay {
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px dashed #5b68f6;
+    }
+    body.light-theme .drag-overlay span { color: #1e293b; }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="app-card">
     <div id="toast" class="toast-msg"></div>
+
+    <div class="corner-controls">
+      <button class="corner-btn" title="Toggle theme" onclick="toggleTheme()">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+      <button class="corner-btn" title="Developer info" onclick="openDevInfo()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </button>
+    </div>
+
+    <div id="drag-overlay" class="drag-overlay">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span>Drop files to send</span>
+    </div>
 
     <!-- VIEW 1: HOME -->
     <div id="view-home">
@@ -441,6 +697,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Receive File
       </button>
+      <p class="drop-hint">or drag &amp; drop files anywhere on this card</p>
       <p class="footer-note">Direct end-to-end encrypted device transfer.</p>
     </div>
 
@@ -534,6 +791,19 @@
         <button id="btn-send-more" class="primary-btn hidden" onclick="sendMoreFiles()">Send More Files</button>
         <button class="secondary-btn" style="margin-bottom: 0;" onclick="cancelAndReset()">Done</button>
       </div>
+    </div>
+  </div>
+
+  <div id="dev-info-modal" class="modal-overlay" onclick="if(event.target===this) closeDevInfo()">
+    <div class="modal-box">
+      <div class="modal-avatar">MJ</div>
+      <div class="modal-name">Mahfuz Alam Joy</div>
+      <div class="modal-role">B.Sc. in Textile Engineering &middot; Developer</div>
+      <a class="modal-row" href="mailto:mahfuzalamjoy56@gmail.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <span>mahfuzalamjoy56@gmail.com</span>
+      </a>
+      <button class="secondary-btn modal-close-btn" style="margin-bottom:0;" onclick="closeDevInfo()">Close</button>
     </div>
   </div>
 
@@ -673,6 +943,81 @@
         transferEta: document.getElementById('transfer-eta'),
         hiddenFileInput: document.getElementById('hidden-file-input')
       };
+    }
+
+    // ---- Theme Toggle (Night/Day) ----
+    function applyTheme(theme) {
+      document.body.classList.toggle('light-theme', theme === 'light');
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', theme === 'light' ? '#ffffff' : '#5b68f6');
+      try { localStorage.setItem('droply-theme', theme); } catch (_) {}
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains('light-theme');
+      applyTheme(isLight ? 'dark' : 'light');
+    }
+
+    (function initTheme() {
+      let saved = null;
+      try { saved = localStorage.getItem('droply-theme'); } catch (_) {}
+      if (saved === 'light') applyTheme('light');
+    })();
+
+    // ---- Developer Info Modal ----
+    function openDevInfo() {
+      const m = document.getElementById('dev-info-modal');
+      if (m) m.classList.add('show');
+    }
+    function closeDevInfo() {
+      const m = document.getElementById('dev-info-modal');
+      if (m) m.classList.remove('show');
+    }
+
+    // ---- Global Drag & Drop (Sender + Receiver screens) ----
+    function initDragAndDrop() {
+      const card = document.getElementById('app-card');
+      const overlay = document.getElementById('drag-overlay');
+      if (!card || !overlay) return;
+      let dragDepth = 0;
+
+      const showOverlay = () => {
+        overlay.classList.add('show');
+        card.classList.add('drag-over');
+      };
+      const hideOverlay = () => {
+        dragDepth = 0;
+        overlay.classList.remove('show');
+        card.classList.remove('drag-over');
+      };
+
+      card.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        if (!e.dataTransfer || !Array.from(e.dataTransfer.types || []).includes('Files')) return;
+        dragDepth++;
+        showOverlay();
+      });
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+      });
+      card.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dragDepth = Math.max(0, dragDepth - 1);
+        if (dragDepth === 0) hideOverlay();
+      });
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        hideOverlay();
+        const files = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+        if (files.length) onFilesPicked({ target: { files } });
+      });
+
+      // Prevent the browser from navigating away if a file is dropped
+      // outside the card (or missed by the handlers above).
+      ['dragover', 'drop'].forEach(evt => {
+        window.addEventListener(evt, (e) => e.preventDefault());
+      });
     }
 
     // High-Precision Rolling Speed Meter
@@ -924,6 +1269,13 @@
         input.onkeydown = (e) => {
           if (e.key === 'Backspace' && !e.target.value && idx > 0) {
             inputs[idx - 1].focus();
+          }
+          if (e.key === 'Enter') {
+            let fullCode = '';
+            inputs.forEach(i => fullCode += i.value);
+            if (/^\d{6}$/.test(fullCode) && els.btnConnect && !els.btnConnect.disabled) {
+              connectWithCode();
+            }
           }
         };
         input.onpaste = (e) => {
@@ -1637,6 +1989,7 @@
     // Direct link auto-open (?code=123456)
     window.addEventListener('DOMContentLoaded', () => {
       initDomElements();
+      initDragAndDrop();
 
       const urlParams = new URLSearchParams(window.location.search);
       const autoCode = (urlParams.get('code') || '').replace(/\D/g, '');
