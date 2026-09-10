@@ -37,77 +37,6 @@
     })();
   </script>
 
-  <script>
-    // Safeguard against sandbox SecurityError when running inside Canvas or restricted iframes
-    window.__droply_ws_blocked = false;
-
-    // Suppress unhandled Canvas WebSocket security errors at the global window level
-    window.addEventListener('error', function(event) {
-      if (event && event.message && (event.message.includes('WebSocket') || event.message.includes('Canvas'))) {
-        window.__droply_ws_blocked = true;
-        if (event.preventDefault) event.preventDefault();
-        return true;
-      }
-    }, true);
-
-    (function() {
-      const NativeWebSocket = window.WebSocket;
-      if (!NativeWebSocket) return;
-
-      function SafeWebSocket(url, protocols) {
-        if (!(this instanceof SafeWebSocket)) {
-          return new SafeWebSocket(url, protocols);
-        }
-        try {
-          if (protocols !== undefined) {
-            return new NativeWebSocket(url, protocols);
-          }
-          return new NativeWebSocket(url);
-        } catch (err) {
-          window.__droply_ws_blocked = true;
-          console.warn('[DropLy Notice] Canvas iframe restricted external WebSocket. Activating local preview simulation.', err.message);
-
-          // Return a safe event-emitting mock so PeerJS does not crash with an uncaught SecurityError
-          const mockWs = {
-            url: url,
-            readyState: 3, // CLOSED
-            bufferedAmount: 0,
-            send: function() {},
-            close: function() {},
-            addEventListener: function() {},
-            removeEventListener: function() {},
-            dispatchEvent: function() { return true; },
-            onopen: null,
-            onclose: null,
-            onerror: null,
-            onmessage: null
-          };
-
-          setTimeout(() => {
-            if (typeof mockWs.onerror === 'function') {
-              mockWs.onerror(new Event('error'));
-            }
-            if (typeof mockWs.onclose === 'function') {
-              mockWs.onclose(new CloseEvent('close', { code: 1006, reason: 'Canvas restricted' }));
-            }
-          }, 15);
-
-          return mockWs;
-        }
-      }
-
-      SafeWebSocket.prototype = NativeWebSocket.prototype;
-      SafeWebSocket.CONNECTING = 0;
-      SafeWebSocket.OPEN = 1;
-      SafeWebSocket.CLOSING = 2;
-      SafeWebSocket.CLOSED = 3;
-
-      try {
-        window.WebSocket = SafeWebSocket;
-      } catch (_) {}
-    })();
-  </script>
-
   <!-- External libraries: PeerJS and QRCode.js -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -145,7 +74,7 @@
       contain: content;
     }
 
-    /* Top Navigation Bar: Arrow navigation + Controls + Corner Cancel Cross */
+    /* Top Navigation Bar */
     .top-nav-bar {
       display: flex;
       align-items: center;
@@ -155,12 +84,7 @@
       position: relative;
       z-index: 60;
     }
-    .nav-arrows {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .corner-controls {
+    .nav-arrows, .corner-controls {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -199,26 +123,6 @@
     .icon-sun { display: none; }
     body.light-theme .icon-moon { display: none; }
     body.light-theme .icon-sun { display: flex; }
-
-    /* Environment notice badge */
-    .env-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 14px;
-      background: rgba(91, 104, 246, 0.14);
-      border: 1px solid rgba(91, 104, 246, 0.28);
-      font-size: 11px;
-      font-weight: 600;
-      color: #a5b4fc;
-      margin-bottom: 12px;
-    }
-    .env-badge.demo {
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(245, 158, 11, 0.3);
-      color: #fbbf24;
-    }
 
     .brand-icon {
       width: 62px;
@@ -398,7 +302,7 @@
       box-shadow: 0 0 0 2px rgba(91, 104, 246, 0.25);
     }
 
-    /* Connected Stage: Drag & Drop Area */
+    /* Connected Drag & Drop Zone */
     .drop-box-zone {
       background: #0d1118;
       border: 2px dashed #28344c;
@@ -456,7 +360,7 @@
       cursor: pointer;
     }
 
-    /* Transfer Card & HUD */
+    /* Transfer Card & Speed HUD */
     .file-meta-card {
       background: #0d1118;
       border: 1px solid #1e2638;
@@ -736,7 +640,7 @@
       margin-top: 8px;
     }
 
-    /* Light Theme Palette */
+    /* Light Theme Styles */
     body.light-theme {
       background-color: #eef1f8;
       color: #111827;
@@ -754,9 +658,7 @@
       border: 1px solid #dbe2ec;
     }
     body.light-theme .secondary-btn:hover { background: #e6ebf3; }
-    body.light-theme .footer-note { color: #94a3b8; }
-    body.light-theme .drop-hint { color: #94a3b8; }
-    body.light-theme .header-title { color: #64748b; }
+    body.light-theme .footer-note, body.light-theme .drop-hint, body.light-theme .header-title { color: #64748b; }
     body.light-theme .code-display-box {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -852,7 +754,7 @@
   <div class="card" id="app-card">
     <div id="toast" class="toast-msg"></div>
 
-    <!-- Top Navigation Bar: Arrows + Utilities + Corner Cancel Cross (Req 4 & 5) -->
+    <!-- Top Navigation Bar -->
     <div class="top-nav-bar">
       <div class="nav-arrows">
         <button class="corner-btn" id="nav-btn-back" title="Go Back" onclick="navigateHistory(-1)" disabled>
@@ -883,15 +785,13 @@
       </div>
     </div>
 
-    <!-- Active environment badge -->
-    <div id="env-badge-container"></div>
-
-    <!-- Drag Overlay Indicator -->
+    <!-- Drag Overlay -->
     <div id="drag-overlay" class="drag-overlay">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       <span>Drop files to select</span>
     </div>
 
+    <!-- VIEW: HOME -->
     <div id="view-home">
       <div class="brand-icon">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -903,7 +803,6 @@
       <h1 class="brand-name">DropLy</h1>
       <p class="tagline">Fast direct P2P transfer between devices.</p>
       
-      <!-- Primary Action: Clicking Send generates code/QR (Req 2) -->
       <button class="primary-btn" onclick="openSendViewNormally()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Send Files
@@ -916,6 +815,7 @@
       <p class="footer-note">Direct end-to-end encrypted device transfer.</p>
     </div>
 
+    <!-- VIEW: SEND (SHARE CODE) -->
     <div id="view-send" class="hidden">
       <div class="view-header">
         <span class="header-title">SEND: SHARE CODE</span>
@@ -931,6 +831,7 @@
       <button class="cancel-btn" onclick="cancelAndReset()">Cancel Transfer</button>
     </div>
 
+    <!-- VIEW: RECEIVE (ENTER CODE) -->
     <div id="view-receive" class="hidden">
       <div class="view-header">
         <span class="header-title">RECEIVE: ENTER CODE</span>
@@ -944,11 +845,11 @@
         <input type="text" maxlength="1" class="otp-input" inputmode="numeric">
         <input type="text" maxlength="1" class="otp-input" inputmode="numeric">
       </div>
-      <!-- Connect via click or Enter key (Req 2) -->
       <button id="btn-connect" class="primary-btn" onclick="connectWithCode()" disabled>Connect &amp; Continue (Enter)</button>
       <button class="cancel-btn" onclick="cancelAndReset()">Cancel</button>
     </div>
 
+    <!-- VIEW: CONNECTED (DRAG & DROP ZONE) -->
     <div id="view-connected" class="hidden">
       <div class="view-header">
         <span class="header-title">CONNECTED &middot; SELECT FILES</span>
@@ -956,7 +857,6 @@
 
       <input type="file" id="connected-file-input" multiple style="display:none;" onchange="onConnectedFilesPicked(event)">
 
-      <!-- Dedicated Drag & Drop Box (Req 3) -->
       <div class="drop-box-zone" id="connected-drop-box" onclick="document.getElementById('connected-file-input').click()">
         <div class="drop-box-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -969,7 +869,6 @@
         <div class="drop-box-sub">or click to browse multiple files</div>
       </div>
 
-      <!-- Lower site: Number of selected files & queue preview (Req 3) -->
       <div class="selection-summary-bar" id="selection-summary-bar">
         <span id="selected-files-count">0 files selected</span>
         <button class="clear-btn-link" onclick="clearStagedFiles()">Clear</button>
@@ -977,7 +876,6 @@
 
       <div id="connected-queue-preview" class="queue-list"></div>
 
-      <!-- Send via Mouse or Enter on keyboard (Req 3) -->
       <button id="btn-send-staged" class="primary-btn" onclick="startTransferStagedFiles()" disabled>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Send Files (Enter)
@@ -985,6 +883,7 @@
       <button class="cancel-btn" onclick="cancelAndReset()">Disconnect</button>
     </div>
 
+    <!-- VIEW: TRANSFER HUD -->
     <div id="view-transfer" class="hidden">
       <div class="view-header">
         <span id="transfer-screen-title" class="header-title">TRANSFERRING</span>
@@ -1005,7 +904,6 @@
         </div>
       </div>
 
-      <!-- Completion Box -->
       <div id="completion-box" class="hidden">
         <div class="success-badge">
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -1016,7 +914,6 @@
         <p id="completion-sub" style="font-size: 13px; color: #8b9bb4; margin-bottom: 20px;">Delivered directly to receiver.</p>
       </div>
 
-      <!-- Live Speed HUD -->
       <div class="transfer-hud">
         <div class="progress-bar-bg">
           <div id="progress-bar-fill"></div>
@@ -1034,7 +931,6 @@
       <div id="transfer-actions">
         <button id="btn-cancel-transfer" class="cancel-btn" style="margin-top: 4px;" onclick="cancelAndReset()">Cancel</button>
       </div>
-      <!-- After completion: Enter returns to drop box without reconnecting (Req 3) -->
       <div id="completion-actions" class="hidden">
         <button id="btn-return-dropzone" class="primary-btn" onclick="goToConnectedScreen()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -1045,6 +941,7 @@
     </div>
   </div>
 
+  <!-- Developer Info Modal -->
   <div id="dev-info-modal" class="modal-overlay" onclick="if(event.target===this) closeDevInfo()">
     <div class="modal-box">
       <div class="modal-avatar">MJ</div>
@@ -1087,7 +984,6 @@
       }
     };
 
-    // Tuned WebRTC chunk pipeline constants
     const MIN_CHUNK_SIZE = 16 * 1024;
     const DEFAULT_CHUNK_SIZE = 64 * 1024;
     const MAX_CHUNK_SIZE = 256 * 1024;
@@ -1097,6 +993,11 @@
     const STALL_TIMEOUT_MS = 10000;
     const FILE_ACK_TIMEOUT_MS = 12000;
     const PROGRESS_THROTTLE_MS = 100;
+
+    // Automatic reconnect parameters
+    const MAX_RECONNECT_ATTEMPTS = 5;
+    const RECONNECT_DELAYS_MS = [1000, 2000, 4000, 6000, 8000];
+    const SENDER_RECONNECT_WINDOW_MS = 30000;
 
     let peer = null;
     let conn = null;
@@ -1108,11 +1009,13 @@
     let lastProgressSentAt = 0;
     let batchFullyDone = false;
 
-    // Detection flag: when true, simulation fallback activates inside Canvas preview
-    let isSimulationMode = false;
-    let simulationTimer = null;
+    let isReconnecting = false;
+    let reconnectAttempts = 0;
+    let reconnectTimer = null;
+    let reconnectGiveUpTimer = null;
+    let hasConnectedOnce = false;
 
-    // Staging and queues (Req 1 & Req 3)
+    // Staging and queues
     let stagedFiles = [];
     let fileQueue = [];
     let currentFileIndex = 0;
@@ -1125,18 +1028,16 @@
     let receiverBatchCount = 1;
     let receiverBatchIndex = 0;
 
-    // Navigation History (Req 5)
+    // Navigation History
     let currentViewId = 'view-home';
     let viewHistory = ['view-home'];
     let historyIndex = 0;
 
-    // DOM Elements Cache
     let els = {};
 
     function initDomElements() {
       els = {
         toast: document.getElementById('toast'),
-        envBadgeContainer: document.getElementById('env-badge-container'),
         displayCode: document.getElementById('display-code'),
         qrcode: document.getElementById('qrcode'),
         sendQueuePreview: document.getElementById('send-queue-preview'),
@@ -1163,6 +1064,11 @@
         navBtnBack: document.getElementById('nav-btn-back'),
         navBtnForward: document.getElementById('nav-btn-forward')
       };
+    }
+
+    function clearReconnectTimers() {
+      if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
+      if (reconnectGiveUpTimer) { clearTimeout(reconnectGiveUpTimer); reconnectGiveUpTimer = null; }
     }
 
     function applyTheme(theme) {
@@ -1220,7 +1126,6 @@
       const newIdx = historyIndex + direction;
       if (newIdx < 0 || newIdx >= viewHistory.length) return;
 
-      // Returning back from an active connected session disconnects (Req 4)
       if (direction < 0 && (currentViewId === 'view-connected' || currentViewId === 'view-transfer')) {
         cancelAndReset();
         return;
@@ -1267,16 +1172,14 @@
         const files = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
         if (!files.length) return;
 
-        // Req 1: Drag & drop on Home immediately stages files and moves to Code/QR screen
         if (currentViewId === 'view-home') {
           stagedFiles = files;
-          openSendViewNormally(true);
+          openSendViewNormally();
         } else if (currentViewId === 'view-send') {
           stagedFiles = files;
           renderSendQueuePreview();
           showToast(`${files.length} file(s) staged`);
         } else if (currentViewId === 'view-connected') {
-          // Req 3: Drag & drop in Connected screen adds files to batch
           appendStagedFiles(files);
         }
       });
@@ -1387,7 +1290,7 @@
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && !wakeLock && !isCancelled && (conn || isSimulationMode)) {
+      if (document.visibilityState === 'visible' && !wakeLock && !isCancelled && conn) {
         requestWakeLock();
       }
     });
@@ -1438,12 +1341,11 @@
     function cancelAndReset() {
       isCancelled = true;
       releaseWakeLock();
+      clearReconnectTimers();
+      isReconnecting = false;
+      reconnectAttempts = 0;
+      hasConnectedOnce = false;
       batchFullyDone = false;
-
-      if (simulationTimer) {
-        clearInterval(simulationTimer);
-        simulationTimer = null;
-      }
 
       if (conn && conn.open) {
         try { conn.send(JSON.stringify({ type: 'TRANSFER_CANCEL' })); } catch (_) {}
@@ -1482,14 +1384,7 @@
       showView('view-home', false);
     }
 
-    function markSimulationMode() {
-      isSimulationMode = true;
-      if (els.envBadgeContainer) {
-        els.envBadgeContainer.innerHTML = '<div class="env-badge demo">⚡ Canvas Preview Mode (Simulated P2P &middot; Real P2P on Firebase)</div>';
-      }
-    }
-
-    function openSendViewNormally(hasPreStagedFiles = false) {
+    function openSendViewNormally() {
       isCancelled = false;
       batchFullyDone = false;
       isSender = true;
@@ -1498,53 +1393,45 @@
       const peerId = 'droply-' + code;
       sessionCode = code;
 
-      // Check if WebSocket is already known to be blocked by Canvas
-      if (window.__droply_ws_blocked) {
-        markSimulationMode();
-      }
-
       if (peer) {
         try { peer.destroy(); } catch (_) {}
       }
 
-      try {
-        peer = new Peer(peerId, PEER_CONFIG);
+      peer = new Peer(peerId, PEER_CONFIG);
 
-        peer.on('error', (err) => {
-          console.warn('[PeerJS Status]', err);
-          if (err && err.type === 'unavailable-id') {
-            openSendViewNormally(hasPreStagedFiles);
-            return;
-          }
-          // If signaling server failed or WebSocket was blocked, safely activate preview simulation
-          markSimulationMode();
-        });
+      peer.on('error', (err) => {
+        console.error('[PeerJS Error]', err);
+        if (err && err.type === 'unavailable-id') {
+          openSendViewNormally();
+          return;
+        }
+        showToast('Network notice: ' + (err.type || 'connection issue'));
+      });
 
-        peer.on('disconnected', () => {
-          if (!isCancelled && peer && !peer.destroyed) {
-            try { peer.reconnect(); } catch (_) {}
-          }
-        });
+      peer.on('disconnected', () => {
+        if (!isCancelled && peer && !peer.destroyed) {
+          try { peer.reconnect(); } catch (_) {}
+        }
+      });
 
-        peer.on('open', () => {
-          setupCodeView(code);
-        });
+      peer.on('open', () => {
+        setupCodeView(code);
+      });
 
-        peer.on('connection', (c) => {
-          if (conn && conn.open) {
-            try { c.close(); } catch (_) {}
-            return;
-          }
-          conn = c;
-          bindPeerConnection(conn);
-        });
-      } catch (err) {
-        console.warn('Caught peer initialization:', err);
-        markSimulationMode();
-      }
-
-      // Ensure code view renders even if signaling is simulated in Canvas
-      setupCodeView(code);
+      peer.on('connection', (c) => {
+        if (conn && conn.open) {
+          try { c.close(); } catch (_) {}
+          return;
+        }
+        const wasReconnecting = isReconnecting;
+        clearReconnectTimers();
+        isReconnecting = false;
+        conn = c;
+        bindPeerConnection(conn);
+        if (wasReconnecting) {
+          showToast('Reconnected successfully!');
+        }
+      });
     }
 
     function setupCodeView(code) {
@@ -1584,30 +1471,29 @@
       isSender = false;
       showView('view-receive');
       setupOtpInputs();
-      if (!isSimulationMode && (!peer || peer.destroyed)) {
+      if (!peer || peer.destroyed) {
         initReceiverPeer();
       }
     }
 
     function initReceiverPeer() {
       if (peer && !peer.destroyed) return;
-      try {
-        peer = new Peer(PEER_CONFIG);
+      peer = new Peer(PEER_CONFIG);
 
-        peer.on('error', (err) => {
-          console.warn('[Receiver Peer Status]', err);
-          markSimulationMode();
-          resetReceiverButton();
-        });
+      peer.on('error', (err) => {
+        console.error('[Receiver Peer Error]', err);
+        const msg = err.type === 'peer-unavailable'
+          ? 'Device not found. Check code and try again.'
+          : 'Connection notice: ' + (err.type || 'check internet');
+        showToast(msg);
+        resetReceiverButton();
+      });
 
-        peer.on('disconnected', () => {
-          if (!isCancelled && peer && !peer.destroyed) {
-            try { peer.reconnect(); } catch (_) {}
-          }
-        });
-      } catch (err) {
-        markSimulationMode();
-      }
+      peer.on('disconnected', () => {
+        if (!isCancelled && peer && !peer.destroyed) {
+          try { peer.reconnect(); } catch (_) {}
+        }
+      });
     }
 
     function resetReceiverButton() {
@@ -1631,7 +1517,6 @@
           if (e.key === 'Backspace' && !e.target.value && idx > 0) {
             inputs[idx - 1].focus();
           }
-          // Req 2: Pressing Enter connects to the receiver
           if (e.key === 'Enter') {
             let fullCode = '';
             inputs.forEach(i => fullCode += i.value);
@@ -1674,22 +1559,14 @@
       isCancelled = false;
       isSender = false;
       sessionCode = targetCode;
+      hasConnectedOnce = false;
+      reconnectAttempts = 0;
       batchFullyDone = false;
 
       const btn = els.btnConnect || document.getElementById('btn-connect');
       if (btn) {
         btn.disabled = true;
         btn.textContent = 'Connecting...';
-      }
-
-      // If in Canvas simulation mode, connect immediately to the connected stage
-      if (isSimulationMode || window.__droply_ws_blocked) {
-        setTimeout(() => {
-          goToConnectedScreen();
-          showToast('Connected!');
-          resetReceiverButton();
-        }, 300);
-        return;
       }
 
       const targetPeerId = 'droply-' + targetCode;
@@ -1702,9 +1579,8 @@
           conn = peer.connect(targetPeerId, { reliable: true });
           bindPeerConnection(conn);
         } catch (err) {
-          console.warn('Connect error, falling back to preview:', err);
-          markSimulationMode();
-          goToConnectedScreen();
+          console.error('Connect failed:', err);
+          showToast('Connection failed. Please retry.');
           resetReceiverButton();
         }
       };
@@ -1713,16 +1589,7 @@
         startConnection();
       } else if (peer) {
         peer.once('open', startConnection);
-        peer.once('error', () => {
-          // If real network fails inside Canvas preview, seamlessly proceed
-          markSimulationMode();
-          goToConnectedScreen();
-          resetReceiverButton();
-        });
-      } else {
-        markSimulationMode();
-        goToConnectedScreen();
-        resetReceiverButton();
+        peer.once('error', resetReceiverButton);
       }
     }
 
@@ -1781,6 +1648,10 @@
         showToast('Please select at least one file first.');
         return;
       }
+      if (!conn || !conn.open) {
+        showToast('Connection not ready. Please wait or reconnect.');
+        return;
+      }
 
       isCancelled = false;
       batchFullyDone = false;
@@ -1788,60 +1659,73 @@
       currentBatchTotal = fileQueue.length;
       currentFileIndex = 0;
 
-      // If in Canvas simulation mode or connection is offline, execute smooth transfer simulation
-      if (isSimulationMode || !conn || !conn.open) {
-        runSimulatedTransferPipeline();
-        return;
-      }
-
       beginNextFileInQueue();
     }
 
-    function runSimulatedTransferPipeline() {
-      if (currentFileIndex >= fileQueue.length) {
-        stagedFiles = [];
-        updateConnectedStagedView();
-        showBatchComplete(currentBatchTotal, true);
+    function handleSenderConnDrop() {
+      if (isCancelled || batchFullyDone || isReconnecting) return;
+      isReconnecting = true;
+      uiState.status = 'Connection lost. Waiting to reconnect...';
+      scheduleUiUpdate();
+      showToast('Connection interrupted. Waiting for the other device...');
+
+      clearReconnectTimers();
+      reconnectGiveUpTimer = setTimeout(() => {
+        if (isReconnecting && !isCancelled) {
+          showToast('Could not reconnect in time.');
+          cancelAndReset();
+        }
+      }, SENDER_RECONNECT_WINDOW_MS);
+    }
+
+    function attemptReceiverReconnect() {
+      if (isCancelled || batchFullyDone || isReconnecting) return;
+      if (!sessionCode || !peer || peer.destroyed) return;
+
+      if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        showToast('Connection lost. Please start the transfer again.');
+        cancelAndReset();
         return;
       }
 
-      const file = fileQueue[currentFileIndex];
-      initTransferView(
-        'SENDING FILE',
-        'Transferring file...',
-        file.name,
-        file.size,
-        currentFileIndex + 1,
-        currentBatchTotal
-      );
+      isReconnecting = true;
+      const attemptNum = reconnectAttempts + 1;
+      uiState.status = `Reconnecting... (${attemptNum}/${MAX_RECONNECT_ATTEMPTS})`;
+      scheduleUiUpdate();
+      if (attemptNum === 1) showToast('Connection interrupted. Reconnecting...');
 
-      let simulatedBytes = 0;
-      const stepBytes = Math.max(16384, Math.floor(file.size / 28));
-      resetSpeedMeter();
+      const delay = RECONNECT_DELAYS_MS[Math.min(reconnectAttempts, RECONNECT_DELAYS_MS.length - 1)];
+      reconnectAttempts++;
 
-      simulationTimer = setInterval(() => {
-        if (isCancelled) {
-          clearInterval(simulationTimer);
-          return;
+      clearReconnectTimers();
+      reconnectTimer = setTimeout(() => {
+        if (isCancelled || !peer || peer.destroyed) return;
+        try {
+          const targetPeerId = 'droply-' + sessionCode;
+          const c = peer.connect(targetPeerId, { reliable: true });
+          conn = c;
+          bindPeerConnection(c);
+        } catch (_) {
+          isReconnecting = false;
+          attemptReceiverReconnect();
         }
-
-        simulatedBytes = Math.min(file.size, simulatedBytes + stepBytes);
-        uiState.transferred = simulatedBytes;
-        scheduleUiUpdate();
-
-        if (simulatedBytes >= file.size) {
-          clearInterval(simulationTimer);
-          simulationTimer = null;
-          currentFileIndex++;
-          setTimeout(runSimulatedTransferPipeline, 350);
-        }
-      }, 50);
+      }, delay);
     }
 
     function bindPeerConnection(c) {
       c.on('open', () => {
         if (isCancelled) return;
+        clearReconnectTimers();
+        hasConnectedOnce = true;
+        reconnectAttempts = 0;
+        isReconnecting = false;
+
         negotiateChunkSize(c);
+        const dc = c.dataChannel || c._dc;
+        if (dc) {
+          try { dc.binaryType = 'arraybuffer'; } catch (_) {}
+        }
+
         goToConnectedScreen();
         showToast('Connected!');
       });
@@ -1854,7 +1738,7 @@
           try { msg = JSON.parse(data); } catch (_) { return; }
 
           if (msg.type === 'TRANSFER_CANCEL') {
-            showToast('Other device cancelled or disconnected.');
+            showToast('Other device cancelled transfer.');
             cancelAndReset();
             return;
           }
@@ -1948,17 +1832,31 @@
       });
 
       c.on('error', (err) => {
-        console.warn('Connection notice:', err);
-        if (!isCancelled) {
-          showToast('Connection interrupted.');
-          cancelAndReset();
+        console.error('Connection error:', err);
+        if (isCancelled) return;
+        if (!hasConnectedOnce) {
+          showToast('Connection issue encountered.');
+          resetReceiverButton();
+          return;
+        }
+        if (isSender) {
+          handleSenderConnDrop();
+        } else {
+          attemptReceiverReconnect();
         }
       });
 
       c.on('close', () => {
-        if (!isCancelled) {
+        if (isCancelled) return;
+        if (!hasConnectedOnce) {
           showToast('Connection closed.');
-          cancelAndReset();
+          resetReceiverButton();
+          return;
+        }
+        if (isSender) {
+          handleSenderConnDrop();
+        } else {
+          attemptReceiverReconnect();
         }
       });
     }
@@ -1993,7 +1891,7 @@
       try {
         completed = await sendSingleFile(file);
       } catch (err) {
-        console.warn('Send error:', err);
+        console.error('Send error:', err);
         if (!isCancelled) {
           uiState.status = 'Transfer error.';
           scheduleUiUpdate();
@@ -2209,15 +2107,25 @@
     window.addEventListener('keydown', (e) => {
       const activeEl = document.activeElement;
       const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+      const devModal = document.getElementById('dev-info-modal');
 
-      // Req 4: Back button on keyboard (Backspace outside inputs or Escape) disconnects and returns Home
-      if ((e.key === 'Backspace' && !isInput) || e.key === 'Escape') {
+      if (e.key === 'Escape') {
+        if (devModal && devModal.classList.contains('show')) {
+          e.preventDefault();
+          closeDevInfo();
+          return;
+        }
         e.preventDefault();
         cancelAndReset();
         return;
       }
 
-      // Req 2 & 3: Enter key navigation
+      if (e.key === 'Backspace' && !isInput) {
+        e.preventDefault();
+        cancelAndReset();
+        return;
+      }
+
       if (e.key === 'Enter') {
         if (currentViewId === 'view-receive') {
           e.preventDefault();
@@ -2230,7 +2138,6 @@
             startTransferStagedFiles();
           }
         } else if (currentViewId === 'view-transfer' && uiState.isComplete) {
-          // Req 3: Enter returns back to the drag-and-drop screen without reconnecting
           e.preventDefault();
           goToConnectedScreen();
         }
