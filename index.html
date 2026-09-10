@@ -8,7 +8,6 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
   <script>
     (function() {
       const canvas = document.createElement('canvas');
@@ -36,11 +35,8 @@
       document.head.appendChild(fav);
     })();
   </script>
-
-  <!-- External libraries: PeerJS and QRCode.js -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
   <style>
     * {
       margin: 0;
@@ -66,73 +62,22 @@
       border-radius: 24px;
       width: 100%;
       max-width: 410px;
-      padding: 22px 22px 26px;
+      padding: 28px 24px;
       text-align: center;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
       position: relative;
       overflow: hidden;
       contain: content;
     }
-
-    /* Top Navigation Bar */
-    .top-nav-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 60;
-    }
-    .nav-arrows, .corner-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .corner-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: #1b2232;
-      border: 1px solid #28344c;
-      color: #8b9bb4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-      flex-shrink: 0;
-    }
-    .corner-btn:hover:not(:disabled) {
-      background: #232d42;
-      color: #ffffff;
-    }
-    .corner-btn:disabled {
-      opacity: 0.25;
-      cursor: not-allowed;
-    }
-    .corner-btn-close:hover:not(:disabled) {
-      background: #3c1919;
-      color: #ef4444;
-      border-color: #ef4444;
-    }
-    .corner-btn svg {
-      width: 15px;
-      height: 15px;
-    }
-    .icon-sun { display: none; }
-    body.light-theme .icon-moon { display: none; }
-    body.light-theme .icon-sun { display: flex; }
-
     .brand-icon {
-      width: 62px;
-      height: 62px;
+      width: 64px;
+      height: 64px;
       background: linear-gradient(135deg, #6366f1, #4338ca);
       border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 4px auto 14px;
+      margin: 8px auto 18px;
       color: #ffffff;
       box-shadow: 0 12px 28px rgba(91, 104, 246, 0.4);
     }
@@ -146,15 +91,14 @@
     .tagline {
       color: #7b8a9e;
       font-size: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 28px;
     }
-
     .primary-btn {
       width: 100%;
       background: #5b68f6;
       color: #ffffff;
       border: none;
-      padding: 14px;
+      padding: 15px;
       border-radius: 14px;
       font-size: 15px;
       font-weight: 600;
@@ -178,12 +122,12 @@
       background: #1b2232;
       color: #ffffff;
       border: 1px solid #28344c;
-      padding: 14px;
+      padding: 15px;
       border-radius: 14px;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       transition: background 0.2s;
       display: flex;
       align-items: center;
@@ -200,9 +144,18 @@
     .view-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      position: relative;
-      margin-bottom: 16px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .back-btn {
+      background: transparent;
+      border: none;
+      color: #8b9bb4;
+      font-size: 26px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px 8px;
+      border-radius: 8px;
     }
     .header-title {
       font-size: 12px;
@@ -215,8 +168,8 @@
       background: #0d1118;
       border: 1px solid #1a2230;
       border-radius: 16px;
-      padding: 16px 10px;
-      margin-bottom: 14px;
+      padding: 18px 10px;
+      margin-bottom: 16px;
     }
     #display-code {
       font-size: 38px;
@@ -232,12 +185,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     }
     #qrcode {
-      min-height: 150px;
-      min-width: 150px;
+      min-height: 160px;
+      min-width: 160px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -251,7 +204,7 @@
       background: #1b2232;
       color: #ffffff;
       border: 1px solid #28344c;
-      padding: 12px;
+      padding: 13px;
       border-radius: 12px;
       font-size: 14px;
       font-weight: 600;
@@ -269,21 +222,19 @@
       cursor: pointer;
       margin-top: 10px;
     }
-
-    /* Receiver Code Input */
     .input-instruction {
-      text-align: center;
+      text-align: left;
       font-size: 11px;
       letter-spacing: 1.2px;
       font-weight: 700;
       color: #72849e;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .otp-container {
       display: flex;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .otp-input {
       width: 48px;
@@ -301,66 +252,6 @@
       border-color: #5b68f6;
       box-shadow: 0 0 0 2px rgba(91, 104, 246, 0.25);
     }
-
-    /* Connected Drag & Drop Zone */
-    .drop-box-zone {
-      background: #0d1118;
-      border: 2px dashed #28344c;
-      border-radius: 18px;
-      padding: 24px 16px;
-      margin-bottom: 14px;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      text-align: center;
-    }
-    .drop-box-zone:hover, .drop-box-zone.drag-active {
-      border-color: #5b68f6;
-      background: rgba(91, 104, 246, 0.08);
-    }
-    .drop-box-icon {
-      width: 46px;
-      height: 46px;
-      background: #1b2232;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 10px;
-      color: #5b68f6;
-    }
-    .drop-box-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-    .drop-box-sub {
-      font-size: 12px;
-      color: #7b8a9e;
-    }
-    .selection-summary-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      background: #0d1118;
-      border: 1px solid #1a2230;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #a5b4fc;
-    }
-    .clear-btn-link {
-      background: transparent;
-      border: none;
-      color: #ef4444;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* Transfer Card & Speed HUD */
     .file-meta-card {
       background: #0d1118;
       border: 1px solid #1e2638;
@@ -415,7 +306,7 @@
       border: 1px solid #1e2638;
       border-radius: 16px;
       padding: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       text-align: left;
     }
     .progress-bar-bg {
@@ -452,15 +343,15 @@
       font-weight: 600;
     }
     .success-badge {
-      width: 66px;
-      height: 66px;
+      width: 68px;
+      height: 68px;
       background: rgba(16, 185, 129, 0.15);
       border: 2px solid #10b981;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 12px auto 14px;
+      margin: 16px auto 16px;
       color: #10b981;
     }
     .toast-msg {
@@ -488,21 +379,21 @@
       opacity: 1;
     }
     .queue-list {
-      max-height: 130px;
+      max-height: 168px;
       overflow-y: auto;
       margin-bottom: 14px;
-      border-radius: 12px;
+      border-radius: 14px;
     }
     .queue-item {
       background: #0d1118;
       border: 1px solid #1a2230;
-      border-radius: 10px;
-      padding: 9px 12px;
+      border-radius: 12px;
+      padding: 11px 12px;
       display: flex;
       align-items: center;
       gap: 10px;
       text-align: left;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .queue-item:last-child {
       margin-bottom: 0;
@@ -525,10 +416,11 @@
       display: none !important;
     }
 
+    /* ---- Drag & Drop ---- */
     .drop-hint {
       font-size: 11px;
       color: #4b5875;
-      margin-top: -4px;
+      margin-top: -8px;
       margin-bottom: 16px;
     }
     .card.drag-over {
@@ -564,7 +456,42 @@
       color: #e2e8f0;
     }
 
-    /* Developer Info Modal */
+    /* ---- Corner Controls (Theme + Dev Info) ---- */
+    .corner-controls {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      gap: 8px;
+      z-index: 60;
+    }
+    .corner-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #1b2232;
+      border: 1px solid #28344c;
+      color: #8b9bb4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .corner-btn:hover {
+      background: #232d42;
+      color: #ffffff;
+    }
+    .corner-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+    .icon-sun { display: none; }
+    body.light-theme .icon-moon { display: none; }
+    body.light-theme .icon-sun { display: flex; }
+
+    /* ---- Developer Info Modal ---- */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -640,7 +567,7 @@
       margin-top: 8px;
     }
 
-    /* Light Theme Styles */
+    /* ---- Light Theme ---- */
     body.light-theme {
       background-color: #eef1f8;
       color: #111827;
@@ -658,7 +585,10 @@
       border: 1px solid #dbe2ec;
     }
     body.light-theme .secondary-btn:hover { background: #e6ebf3; }
-    body.light-theme .footer-note, body.light-theme .drop-hint, body.light-theme .header-title { color: #64748b; }
+    body.light-theme .footer-note { color: #94a3b8; }
+    body.light-theme .drop-hint { color: #94a3b8; }
+    body.light-theme .back-btn { color: #64748b; }
+    body.light-theme .header-title { color: #64748b; }
     body.light-theme .code-display-box {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -669,28 +599,14 @@
       color: #0f172a;
       border: 1px solid #dbe2ec;
     }
-    body.light-theme .cancel-btn { border: 1px solid #fecaca; }
+    body.light-theme .cancel-btn {
+      border: 1px solid #fecaca;
+    }
     body.light-theme .input-instruction { color: #64748b; }
     body.light-theme .otp-input {
       background: #f8fafc;
       border: 1px solid #dbe2ec;
       color: #0f172a;
-    }
-    body.light-theme .drop-box-zone {
-      background: #f8fafc;
-      border-color: #cbd5e1;
-    }
-    body.light-theme .drop-box-zone:hover, body.light-theme .drop-box-zone.drag-active {
-      border-color: #5b68f6;
-      background: #eef2ff;
-    }
-    body.light-theme .drop-box-icon { background: #eef0ff; }
-    body.light-theme .drop-box-title { color: #0f172a; }
-    body.light-theme .drop-box-sub { color: #64748b; }
-    body.light-theme .selection-summary-bar {
-      background: #f8fafc;
-      border-color: #e2e8f0;
-      color: #4338ca;
     }
     body.light-theme .file-meta-card {
       background: #f8fafc;
@@ -722,15 +638,7 @@
       border: 1px solid #dbe2ec;
       color: #475569;
     }
-    body.light-theme .corner-btn:hover:not(:disabled) {
-      background: #e6ebf3;
-      color: #0f172a;
-    }
-    body.light-theme .corner-btn-close:hover:not(:disabled) {
-      background: #fee2e2;
-      color: #dc2626;
-      border-color: #f87171;
-    }
+    body.light-theme .corner-btn:hover { background: #e6ebf3; color: #0f172a; }
     body.light-theme .modal-box {
       background: #ffffff;
       border: 1px solid #e2e8f0;
@@ -754,47 +662,22 @@
   <div class="card" id="app-card">
     <div id="toast" class="toast-msg"></div>
 
-    <!-- Hidden file input for direct picker on home view -->
-    <input type="file" id="main-file-input" multiple style="display:none;" onchange="onMainFilesPicked(event)">
-
-    <!-- Top Navigation Bar -->
-    <div class="top-nav-bar">
-      <div class="nav-arrows">
-        <button class="corner-btn" id="nav-btn-back" title="Go Back" onclick="navigateHistory(-1)" disabled>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <button class="corner-btn" id="nav-btn-forward" title="Go Forward" onclick="navigateHistory(1)" disabled>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
-      <div class="corner-controls">
-        <button class="corner-btn" title="Toggle theme" onclick="toggleTheme()">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-        </button>
-        <button class="corner-btn" title="Developer info" onclick="openDevInfo()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        </button>
-        <button class="corner-btn corner-btn-close" id="corner-close-btn" title="Cancel & Return Home (Esc)" onclick="cancelAndReset()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
+    <div class="corner-controls">
+      <button class="corner-btn" title="Toggle theme" onclick="toggleTheme()">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+      <button class="corner-btn" title="Developer info" onclick="openDevInfo()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </button>
     </div>
 
-    <!-- Drag Overlay -->
     <div id="drag-overlay" class="drag-overlay">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <span>Drop files to select</span>
+      <span>Drop files to send</span>
     </div>
 
-    <!-- VIEW: HOME -->
+    <!-- VIEW 1: HOME -->
     <div id="view-home">
       <div class="brand-icon">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -805,8 +688,8 @@
       </div>
       <h1 class="brand-name">DropLy</h1>
       <p class="tagline">Fast direct P2P transfer between devices.</p>
-      
-      <button class="primary-btn" onclick="document.getElementById('main-file-input').click()">
+      <input type="file" id="hidden-file-input" multiple style="display: none;" onchange="onFilesPicked(event)">
+      <button class="primary-btn" onclick="document.getElementById('hidden-file-input').click()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Send Files
       </button>
@@ -814,13 +697,14 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Receive File
       </button>
-      <p class="drop-hint">or drag &amp; drop files anywhere to start sharing</p>
+      <p class="drop-hint">or drag &amp; drop files anywhere on this card</p>
       <p class="footer-note">Direct end-to-end encrypted device transfer.</p>
     </div>
 
-    <!-- VIEW: SEND (SHARE CODE) -->
+    <!-- VIEW 2: SENDER CODE & QR -->
     <div id="view-send" class="hidden">
       <div class="view-header">
+        <button class="back-btn" onclick="cancelAndReset()">&#8249;</button>
         <span class="header-title">SEND: SHARE CODE</span>
       </div>
       <div class="code-display-box">
@@ -834,9 +718,10 @@
       <button class="cancel-btn" onclick="cancelAndReset()">Cancel Transfer</button>
     </div>
 
-    <!-- VIEW: RECEIVE (ENTER CODE) -->
+    <!-- VIEW 3: RECEIVER CODE INPUT -->
     <div id="view-receive" class="hidden">
       <div class="view-header">
+        <button class="back-btn" onclick="cancelAndReset()">&#8249;</button>
         <span class="header-title">RECEIVE: ENTER CODE</span>
       </div>
       <p class="input-instruction">ENTER 6-DIGIT CODE</p>
@@ -848,45 +733,11 @@
         <input type="text" maxlength="1" class="otp-input" inputmode="numeric">
         <input type="text" maxlength="1" class="otp-input" inputmode="numeric">
       </div>
-      <button id="btn-connect" class="primary-btn" onclick="connectWithCode()" disabled>Connect &amp; Receive (Enter)</button>
+      <button id="btn-connect" class="primary-btn" onclick="connectWithCode()" disabled>Connect & Receive</button>
       <button class="cancel-btn" onclick="cancelAndReset()">Cancel</button>
     </div>
 
-    <!-- VIEW: CONNECTED (STAGING FILES) -->
-    <div id="view-connected" class="hidden">
-      <div class="view-header">
-        <span class="header-title">CONNECTED &middot; SELECT FILES</span>
-      </div>
-
-      <input type="file" id="connected-file-input" multiple style="display:none;" onchange="onConnectedFilesPicked(event)">
-
-      <div class="drop-box-zone" id="connected-drop-box" onclick="document.getElementById('connected-file-input').click()">
-        <div class="drop-box-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-        </div>
-        <div class="drop-box-title">Drag &amp; Drop files here</div>
-        <div class="drop-box-sub">or click to browse multiple files</div>
-      </div>
-
-      <div class="selection-summary-bar" id="selection-summary-bar">
-        <span id="selected-files-count">0 files selected</span>
-        <button class="clear-btn-link" onclick="clearStagedFiles()">Clear</button>
-      </div>
-
-      <div id="connected-queue-preview" class="queue-list"></div>
-
-      <button id="btn-send-staged" class="primary-btn" onclick="startTransferStagedFiles()" disabled>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        Send Files (Enter)
-      </button>
-      <button class="cancel-btn" onclick="cancelAndReset()">Disconnect</button>
-    </div>
-
-    <!-- VIEW: TRANSFER HUD -->
+    <!-- VIEW 4: TRANSFER HUD -->
     <div id="view-transfer" class="hidden">
       <div class="view-header">
         <span id="transfer-screen-title" class="header-title">TRANSFERRING</span>
@@ -907,6 +758,7 @@
         </div>
       </div>
 
+      <!-- Completion Box -->
       <div id="completion-box" class="hidden">
         <div class="success-badge">
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -914,9 +766,10 @@
           </svg>
         </div>
         <h2 id="completion-title" style="font-size: 20px; font-weight: 700; margin-bottom: 6px;">Transfer Complete!</h2>
-        <p id="completion-sub" style="font-size: 13px; color: #8b9bb4; margin-bottom: 20px;">Delivered directly to receiver.</p>
+        <p id="completion-sub" style="font-size: 13px; color: #8b9bb4; margin-bottom: 20px;">File saved directly to your device.</p>
       </div>
 
+      <!-- Live Speed HUD -->
       <div class="transfer-hud">
         <div class="progress-bar-bg">
           <div id="progress-bar-fill"></div>
@@ -935,16 +788,12 @@
         <button id="btn-cancel-transfer" class="cancel-btn" style="margin-top: 4px;" onclick="cancelAndReset()">Cancel</button>
       </div>
       <div id="completion-actions" class="hidden">
-        <button id="btn-return-dropzone" class="primary-btn" onclick="goToConnectedScreen()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Send More Files (Enter)
-        </button>
-        <button class="secondary-btn" style="margin-bottom: 0;" onclick="cancelAndReset()">Disconnect &amp; Done</button>
+        <button id="btn-send-more" class="primary-btn hidden" onclick="sendMoreFiles()">Send More Files</button>
+        <button class="secondary-btn" style="margin-bottom: 0;" onclick="cancelAndReset()">Done</button>
       </div>
     </div>
   </div>
 
-  <!-- Developer Info Modal -->
   <div id="dev-info-modal" class="modal-overlay" onclick="if(event.target===this) closeDevInfo()">
     <div class="modal-box">
       <div class="modal-avatar">MJ</div>
@@ -962,82 +811,116 @@
     const PEER_CONFIG = {
       config: {
         iceServers: [
-          { urls: "stun:stun.relay.metered.ca:80" },
+          {
+            urls: "stun:stun.relay.metered.ca:80",
+          },
           {
             urls: "turn:global.relay.metered.ca:80",
             username: "62588f777bbaaf306ef3f17f",
-            credential: "vCNtTXqhnEYquavX"
+            credential: "vCNtTXqhnEYquavX",
           },
           {
             urls: "turn:global.relay.metered.ca:80?transport=tcp",
             username: "62588f777bbaaf306ef3f17f",
-            credential: "vCNtTXqhnEYquavX"
+            credential: "vCNtTXqhnEYquavX",
           },
           {
             urls: "turn:global.relay.metered.ca:443",
             username: "62588f777bbaaf306ef3f17f",
-            credential: "vCNtTXqhnEYquavX"
+            credential: "vCNtTXqhnEYquavX",
           },
           {
             urls: "turns:global.relay.metered.ca:443?transport=tcp",
             username: "62588f777bbaaf306ef3f17f",
-            credential: "vCNtTXqhnEYquavX"
+            credential: "vCNtTXqhnEYquavX",
           }
         ]
       }
     };
 
-    const MIN_CHUNK_SIZE = 16 * 1024;
-    const DEFAULT_CHUNK_SIZE = 64 * 1024;
-    const MAX_CHUNK_SIZE = 256 * 1024;
-    let CHUNK_SIZE = DEFAULT_CHUNK_SIZE;
-    const HIGH_WATER_MARK = 4 * 1024 * 1024;
-    const LOW_WATER_MARK = 1 * 1024 * 1024;
-    const STALL_TIMEOUT_MS = 10000;
-    const FILE_ACK_TIMEOUT_MS = 12000;
-    const PROGRESS_THROTTLE_MS = 100;
+    // Tuned for maximum WebRTC DataChannel throughput and zero freezing
+    const MIN_CHUNK_SIZE = 16 * 1024;        // 16 KB floor - safe on every browser/device
+    const DEFAULT_CHUNK_SIZE = 64 * 1024;    // 64 KB - safe cross-browser default until negotiated
+    const MAX_CHUNK_SIZE = 256 * 1024;       // 256 KB ceiling - modern browsers only
+    let CHUNK_SIZE = DEFAULT_CHUNK_SIZE;     // actual value set per-connection, see negotiateChunkSize()
+    const HIGH_WATER_MARK = 4 * 1024 * 1024; // 4 MB queue capacity - deep pipeline for max throughput
+    const LOW_WATER_MARK = 1 * 1024 * 1024;  // 1 MB resume threshold
+    const STALL_TIMEOUT_MS = 10000;          // if buffer doesn't drain in 10s, treat connection as dead
+    const FILE_ACK_TIMEOUT_MS = 12000;       // don't wait forever for receiver confirmation
+    const PROGRESS_THROTTLE_MS = 100;        // receiver -> sender progress ping rate
 
+    // Reconnection tuning - what turns a dropped WiFi/cellular handoff into
+    // a brief pause instead of a dead transfer.
     const MAX_RECONNECT_ATTEMPTS = 5;
     const RECONNECT_DELAYS_MS = [1000, 2000, 4000, 6000, 8000];
-    const SENDER_RECONNECT_WINDOW_MS = 30000;
+    const SENDER_RECONNECT_WINDOW_MS = 30000; // how long the sender waits for the receiver to redial
 
     let peer = null;
     let conn = null;
     let isCancelled = false;
     let isSender = false;
-    let isTransferring = false;
     let wakeLock = null;
     let sessionCode = null;
     let pendingFileAckResolve = null;
     let lastProgressSentAt = 0;
-    let batchFullyDone = false;
-
     let isReconnecting = false;
     let reconnectAttempts = 0;
     let reconnectTimer = null;
     let reconnectGiveUpTimer = null;
     let hasConnectedOnce = false;
+    // True only once the WHOLE batch is done (showBatchComplete ran) - not
+    // to be confused with uiState.isComplete, which also flashes true for a
+    // moment after each individual file in a multi-file batch. Reconnect
+    // logic must key off this one so it doesn't mistake "file 1 of 3 just
+    // finished" for "nothing left to do".
+    let batchFullyDone = false;
 
-    let stagedFiles = [];
     let fileQueue = [];
     let currentFileIndex = 0;
     let currentBatchTotal = 0;
 
+    // Receiver state
     let receiverMeta = null;
     let receiverChunks = [];
     let receiverBytes = 0;
     let receiverBatchCount = 1;
     let receiverBatchIndex = 0;
 
-    let currentViewId = 'view-home';
-    let viewHistory = ['view-home'];
-    let historyIndex = 0;
+    // Reads the SCTP association's actual negotiated max message size (once
+    // the connection is open) and raises CHUNK_SIZE up to it, capped at
+    // MAX_CHUNK_SIZE. Falls back to the safe default if unavailable so this
+    // can never push an unsafe size. Bigger chunks where the browser pair
+    // supports them = fewer messages for the same bytes = more throughput.
+    function negotiateChunkSize(c) {
+      try {
+        const pc = c && c.peerConnection;
+        const maxMsg = pc && pc.sctp && pc.sctp.maxMessageSize;
+        if (maxMsg && isFinite(maxMsg) && maxMsg > 0) {
+          const safe = Math.min(maxMsg - 2048, MAX_CHUNK_SIZE);
+          CHUNK_SIZE = Math.max(MIN_CHUNK_SIZE, safe);
+        } else {
+          CHUNK_SIZE = DEFAULT_CHUNK_SIZE;
+        }
+      } catch (_) {
+        CHUNK_SIZE = DEFAULT_CHUNK_SIZE;
+      }
+    }
 
+    function clearReconnectTimers() {
+      if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
+      if (reconnectGiveUpTimer) { clearTimeout(reconnectGiveUpTimer); reconnectGiveUpTimer = null; }
+    }
+
+    // Cached DOM Elements
     let els = {};
 
     function initDomElements() {
       els = {
         toast: document.getElementById('toast'),
+        viewHome: document.getElementById('view-home'),
+        viewSend: document.getElementById('view-send'),
+        viewReceive: document.getElementById('view-receive'),
+        viewTransfer: document.getElementById('view-transfer'),
         displayCode: document.getElementById('display-code'),
         qrcode: document.getElementById('qrcode'),
         sendQueuePreview: document.getElementById('send-queue-preview'),
@@ -1052,27 +935,17 @@
         completionSub: document.getElementById('completion-sub'),
         transferActions: document.getElementById('transfer-actions'),
         completionActions: document.getElementById('completion-actions'),
-        btnReturnDropzone: document.getElementById('btn-return-dropzone'),
+        btnSendMore: document.getElementById('btn-send-more'),
         progressBarFill: document.getElementById('progress-bar-fill'),
         transferStatus: document.getElementById('transfer-status'),
         transferPercentage: document.getElementById('transfer-percentage'),
         transferSpeed: document.getElementById('transfer-speed'),
         transferEta: document.getElementById('transfer-eta'),
-        mainFileInput: document.getElementById('main-file-input'),
-        connectedFileInput: document.getElementById('connected-file-input'),
-        selectedFilesCount: document.getElementById('selected-files-count'),
-        connectedQueuePreview: document.getElementById('connected-queue-preview'),
-        btnSendStaged: document.getElementById('btn-send-staged'),
-        navBtnBack: document.getElementById('nav-btn-back'),
-        navBtnForward: document.getElementById('nav-btn-forward')
+        hiddenFileInput: document.getElementById('hidden-file-input')
       };
     }
 
-    function clearReconnectTimers() {
-      if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
-      if (reconnectGiveUpTimer) { clearTimeout(reconnectGiveUpTimer); reconnectGiveUpTimer = null; }
-    }
-
+    // ---- Theme Toggle (Night/Day) ----
     function applyTheme(theme) {
       document.body.classList.toggle('light-theme', theme === 'light');
       const meta = document.querySelector('meta[name="theme-color"]');
@@ -1091,6 +964,7 @@
       if (saved === 'light') applyTheme('light');
     })();
 
+    // ---- Developer Info Modal ----
     function openDevInfo() {
       const m = document.getElementById('dev-info-modal');
       if (m) m.classList.add('show');
@@ -1100,43 +974,7 @@
       if (m) m.classList.remove('show');
     }
 
-    function updateNavArrowState() {
-      if (els.navBtnBack) els.navBtnBack.disabled = (historyIndex <= 0);
-      if (els.navBtnForward) els.navBtnForward.disabled = (historyIndex >= viewHistory.length - 1);
-    }
-
-    function showView(viewId, pushHistory = true) {
-      ['view-home', 'view-send', 'view-receive', 'view-connected', 'view-transfer'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
-      });
-      const target = document.getElementById(viewId);
-      if (target) target.classList.remove('hidden');
-      currentViewId = viewId;
-
-      if (pushHistory) {
-        if (viewHistory[historyIndex] !== viewId) {
-          viewHistory = viewHistory.slice(0, historyIndex + 1);
-          viewHistory.push(viewId);
-          historyIndex = viewHistory.length - 1;
-        }
-      }
-      updateNavArrowState();
-    }
-
-    function navigateHistory(direction) {
-      const newIdx = historyIndex + direction;
-      if (newIdx < 0 || newIdx >= viewHistory.length) return;
-
-      if (direction < 0 && (currentViewId === 'view-connected' || currentViewId === 'view-transfer')) {
-        cancelAndReset();
-        return;
-      }
-
-      historyIndex = newIdx;
-      showView(viewHistory[newIdx], false);
-    }
-
+    // ---- Global Drag & Drop (Sender + Receiver screens) ----
     function initDragAndDrop() {
       const card = document.getElementById('app-card');
       const overlay = document.getElementById('drag-overlay');
@@ -1172,26 +1010,17 @@
         e.preventDefault();
         hideOverlay();
         const files = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
-        if (!files.length) return;
-
-        if (currentViewId === 'view-home') {
-          startSenderSession(files);
-        } else if (currentViewId === 'view-send') {
-          stagedFiles = files;
-          fileQueue = [...stagedFiles];
-          currentBatchTotal = fileQueue.length;
-          renderSendQueuePreview();
-          showToast(`${files.length} file(s) selected`);
-        } else if (currentViewId === 'view-connected') {
-          appendStagedFiles(files);
-        }
+        if (files.length) onFilesPicked({ target: { files } });
       });
 
+      // Prevent the browser from navigating away if a file is dropped
+      // outside the card (or missed by the handlers above).
       ['dragover', 'drop'].forEach(evt => {
         window.addEventListener(evt, (e) => e.preventDefault());
       });
     }
 
+    // High-Precision Rolling Speed Meter
     let speedSamples = [];
     let smoothedSpeed = 0;
 
@@ -1204,18 +1033,23 @@
       const now = performance.now();
       speedSamples.push({ t: now, b: transferred });
 
+      // Keep sample window at 1.0s for instantaneous, jitter-free speed
       while (speedSamples.length > 2 && now - speedSamples[0].t > 1000) {
         speedSamples.shift();
       }
+
       if (speedSamples.length < 2) return smoothedSpeed;
 
       const dt = (speedSamples[speedSamples.length - 1].t - speedSamples[0].t) / 1000;
       const db = speedSamples[speedSamples.length - 1].b - speedSamples[0].b;
       const currentRate = dt > 0 ? db / dt : 0;
+
+      // Exponential Moving Average filter
       smoothedSpeed = smoothedSpeed === 0 ? currentRate : (smoothedSpeed * 0.65 + currentRate * 0.35);
       return smoothedSpeed;
     }
 
+    // 60FPS Hardware-Accelerated UI Loop
     let uiState = {
       transferred: 0,
       total: 0,
@@ -1227,7 +1061,9 @@
 
     function scheduleUiUpdate() {
       uiState.dirty = true;
-      if (!rafId) rafId = requestAnimationFrame(renderUi);
+      if (!rafId) {
+        rafId = requestAnimationFrame(renderUi);
+      }
     }
 
     function renderUi() {
@@ -1292,8 +1128,9 @@
       }
     }
 
+    // Re-acquire wake lock if the OS auto-released it (e.g. tab was backgrounded)
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && !wakeLock && !isCancelled && conn) {
+      if (document.visibilityState === 'visible' && !wakeLock && !isCancelled && (isSender ? conn : receiverMeta)) {
         requestWakeLock();
       }
     });
@@ -1320,30 +1157,17 @@
       return (bytes / Math.pow(k, i)).toFixed(i === 0 ? 0 : 1) + ' ' + sizes[i];
     }
 
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    function negotiateChunkSize(c) {
-      try {
-        const pc = c && c.peerConnection;
-        const maxMsg = pc && pc.sctp && pc.sctp.maxMessageSize;
-        if (maxMsg && isFinite(maxMsg) && maxMsg > 0) {
-          const safe = Math.min(maxMsg - 2048, MAX_CHUNK_SIZE);
-          CHUNK_SIZE = Math.max(MIN_CHUNK_SIZE, safe);
-        } else {
-          CHUNK_SIZE = DEFAULT_CHUNK_SIZE;
-        }
-      } catch (_) {
-        CHUNK_SIZE = DEFAULT_CHUNK_SIZE;
-      }
+    function showView(viewId) {
+      ['view-home', 'view-send', 'view-receive', 'view-transfer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      const target = document.getElementById(viewId);
+      if (target) target.classList.remove('hidden');
     }
 
     function cancelAndReset() {
       isCancelled = true;
-      isTransferring = false;
       releaseWakeLock();
       clearReconnectTimers();
       isReconnecting = false;
@@ -1363,7 +1187,6 @@
         peer = null;
       }
 
-      stagedFiles = [];
       fileQueue = [];
       currentFileIndex = 0;
       currentBatchTotal = 0;
@@ -1375,150 +1198,63 @@
       pendingFileAckResolve = null;
       resetSpeedMeter();
 
-      if (els.mainFileInput) els.mainFileInput.value = '';
-      if (els.connectedFileInput) els.connectedFileInput.value = '';
+      if (els.hiddenFileInput) els.hiddenFileInput.value = '';
 
       const btn = els.btnConnect || document.getElementById('btn-connect');
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Connect & Receive (Enter)';
+        btn.textContent = 'Connect & Receive';
       }
 
-      viewHistory = ['view-home'];
-      historyIndex = 0;
-      showView('view-home', false);
+      showView('view-home');
     }
 
-    function onMainFilesPicked(e) {
-      const files = e.target.files ? Array.from(e.target.files) : [];
-      if (!files.length) return;
-      startSenderSession(files);
-    }
-
-    function startSenderSession(files) {
-      isCancelled = false;
-      batchFullyDone = false;
-      isSender = true;
-      isTransferring = false;
-      stagedFiles = files;
-      fileQueue = [...files];
-      currentBatchTotal = files.length;
-      currentFileIndex = 0;
-
-      const code = generateSixDigitCode();
-      const peerId = 'droply-' + code;
-      sessionCode = code;
-
-      if (peer) {
-        try { peer.destroy(); } catch (_) {}
-      }
-
-      peer = new Peer(peerId, PEER_CONFIG);
-
-      peer.on('error', (err) => {
-        console.error('[PeerJS Error]', err);
-        if (err && err.type === 'unavailable-id') {
-          startSenderSession(files);
-          return;
-        }
-        showToast('Network notice: ' + (err.type || 'connection issue'));
-      });
-
-      peer.on('disconnected', () => {
-        if (!isCancelled && peer && !peer.destroyed) {
-          try { peer.reconnect(); } catch (_) {}
-        }
-      });
-
-      peer.on('open', () => {
-        setupCodeView(code);
-      });
-
-      peer.on('connection', (c) => {
-        if (conn && conn.open) {
-          try { c.close(); } catch (_) {}
-          return;
-        }
-        const wasReconnecting = isReconnecting;
-        clearReconnectTimers();
-        isReconnecting = false;
-        conn = c;
-        bindPeerConnection(conn);
-        if (wasReconnecting) {
-          showToast('Reconnected. Resuming transfer...');
-        }
-      });
-    }
-
-    function setupCodeView(code) {
-      if (els.displayCode) els.displayCode.textContent = code;
-      renderSendQueuePreview();
-      showView('view-send');
-
-      if (els.qrcode) {
-        els.qrcode.innerHTML = '';
-        if (window.QRCode) {
-          try {
-            const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
-            new QRCode(els.qrcode, {
-              text: shareUrl,
-              width: 150,
-              height: 150,
-              colorDark: '#000000',
-              colorLight: '#ffffff'
-            });
-          } catch (_) {}
-        }
-      }
-    }
-
-    function renderSendQueuePreview() {
-      if (!els.sendQueuePreview) return;
-      if (!fileQueue.length) {
-        els.sendQueuePreview.innerHTML = '<div style="font-size:12px;color:#7b8a9e;padding:6px 0;">Waiting for receiver to connect...</div>';
+    function sendMoreFiles() {
+      if (!conn || !conn.open) {
+        showToast('Connection closed. Please start a new transfer.');
+        cancelAndReset();
         return;
       }
-      els.sendQueuePreview.innerHTML = fileQueue.map(f =>
-        `<div class="queue-item"><span class="queue-item-name">${escapeHtml(f.name)}</span><span class="queue-item-size">${formatBytes(f.size)}</span></div>`
-      ).join('');
+      isCancelled = false;
+      if (els.hiddenFileInput) {
+        els.hiddenFileInput.value = '';
+        els.hiddenFileInput.click();
+      }
     }
 
     function openReceiveView() {
       isSender = false;
-      isTransferring = false;
       showView('view-receive');
       setupOtpInputs();
-      if (!peer || peer.destroyed) {
-        initReceiverPeer();
+      if (!peer || peer.destroyed) initReceiverPeer();
+    }
+
+    function copyShareLink() {
+      const code = sessionCode || (els.displayCode ? els.displayCode.textContent : '');
+      const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('Link copied to clipboard!');
+        }).catch(() => fallbackCopy(shareUrl));
+      } else {
+        fallbackCopy(shareUrl);
       }
     }
 
-    function initReceiverPeer() {
-      if (peer && !peer.destroyed) return;
-      peer = new Peer(PEER_CONFIG);
-
-      peer.on('error', (err) => {
-        console.error('[Receiver Peer Error]', err);
-        const msg = err.type === 'peer-unavailable'
-          ? 'Device not found. Check code and try again.'
-          : 'Connection notice: ' + (err.type || 'check internet');
-        showToast(msg);
-        resetReceiverButton();
-      });
-
-      peer.on('disconnected', () => {
-        if (!isCancelled && peer && !peer.destroyed) {
-          try { peer.reconnect(); } catch (_) {}
-        }
-      });
-    }
-
-    function resetReceiverButton() {
-      const btn = els.btnConnect || document.getElementById('btn-connect');
-      if (btn) {
-        btn.disabled = false;
-        btn.textContent = 'Connect & Receive (Enter)';
+    function fallbackCopy(text) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      el.style.position = 'fixed';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.select();
+      try {
+        document.execCommand('copy');
+        showToast('Link copied to clipboard!');
+      } catch (_) {
+        showToast('Copy link: ' + text);
       }
+      document.body.removeChild(el);
     }
 
     function setupOtpInputs() {
@@ -1535,8 +1271,6 @@
             inputs[idx - 1].focus();
           }
           if (e.key === 'Enter') {
-            e.preventDefault();
-            e.stopPropagation();
             let fullCode = '';
             inputs.forEach(i => fullCode += i.value);
             if (/^\d{6}$/.test(fullCode) && els.btnConnect && !els.btnConnect.disabled) {
@@ -1562,500 +1296,8 @@
       let fullCode = '';
       inputs.forEach(i => fullCode += i.value);
       if (els.btnConnect) {
-        els.btnConnect.disabled = (fullCode.length !== 6);
+        els.btnConnect.disabled = fullCode.length !== 6;
       }
-    }
-
-    async function connectWithCode(customCode = null) {
-      let targetCode = customCode;
-      if (!targetCode) {
-        const inputs = document.querySelectorAll('.otp-input');
-        targetCode = '';
-        inputs.forEach(i => targetCode += i.value);
-      }
-      if (!/^\d{6}$/.test(targetCode)) return;
-
-      isCancelled = false;
-      isSender = false;
-      isTransferring = false;
-      sessionCode = targetCode;
-      hasConnectedOnce = false;
-      reconnectAttempts = 0;
-      batchFullyDone = false;
-
-      const btn = els.btnConnect || document.getElementById('btn-connect');
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = 'Connecting...';
-      }
-
-      const targetPeerId = 'droply-' + targetCode;
-      if (!peer || peer.destroyed) {
-        initReceiverPeer();
-      }
-
-      const startConnection = () => {
-        try {
-          conn = peer.connect(targetPeerId, { reliable: true });
-          bindPeerConnection(conn);
-        } catch (err) {
-          console.error('Connect failed:', err);
-          showToast('Connection failed. Please retry.');
-          resetReceiverButton();
-        }
-      };
-
-      if (peer && peer.open) {
-        startConnection();
-      } else if (peer) {
-        peer.once('open', startConnection);
-        peer.once('error', resetReceiverButton);
-      }
-    }
-
-    function goToConnectedScreen() {
-      showView('view-connected');
-      updateConnectedStagedView();
-    }
-
-    function onConnectedFilesPicked(e) {
-      const files = e.target.files ? Array.from(e.target.files) : [];
-      if (files.length) appendStagedFiles(files);
-      if (els.connectedFileInput) els.connectedFileInput.value = '';
-    }
-
-    function appendStagedFiles(newFiles) {
-      stagedFiles = stagedFiles.concat(newFiles);
-      updateConnectedStagedView();
-      showToast(`${newFiles.length} file(s) added`);
-    }
-
-    function clearStagedFiles() {
-      stagedFiles = [];
-      if (els.connectedFileInput) els.connectedFileInput.value = '';
-      updateConnectedStagedView();
-    }
-
-    function updateConnectedStagedView() {
-      const count = stagedFiles.length;
-      let totalBytes = 0;
-      stagedFiles.forEach(f => totalBytes += f.size);
-
-      if (els.selectedFilesCount) {
-        els.selectedFilesCount.textContent = count === 0 
-          ? '0 files selected' 
-          : `${count} file${count > 1 ? 's' : ''} selected (${formatBytes(totalBytes)})`;
-      }
-      if (els.btnSendStaged) {
-        els.btnSendStaged.disabled = (count === 0);
-        els.btnSendStaged.textContent = count > 0 
-          ? `Send ${count} File${count > 1 ? 's' : ''} (Enter)` 
-          : 'Send Files (Enter)';
-      }
-
-      if (els.connectedQueuePreview) {
-        if (!count) {
-          els.connectedQueuePreview.innerHTML = '';
-        } else {
-          els.connectedQueuePreview.innerHTML = stagedFiles.map(f =>
-            `<div class="queue-item"><span class="queue-item-name">${escapeHtml(f.name)}</span><span class="queue-item-size">${formatBytes(f.size)}</span></div>`
-          ).join('');
-        }
-      }
-    }
-
-    async function startTransferStagedFiles() {
-      if (!stagedFiles.length) {
-        showToast('Please select at least one file first.');
-        return;
-      }
-      if (!conn || !conn.open) {
-        showToast('Connection not ready. Please wait or reconnect.');
-        return;
-      }
-
-      isCancelled = false;
-      batchFullyDone = false;
-      fileQueue = [...stagedFiles];
-      currentBatchTotal = fileQueue.length;
-      currentFileIndex = 0;
-      isSender = true;
-
-      beginNextFileInQueue();
-    }
-
-    function handleSenderConnDrop() {
-      if (isCancelled || batchFullyDone || isReconnecting) return;
-      isReconnecting = true;
-      uiState.status = 'Connection lost. Waiting to reconnect...';
-      scheduleUiUpdate();
-      showToast('Connection interrupted. Waiting for receiver...');
-
-      clearReconnectTimers();
-      reconnectGiveUpTimer = setTimeout(() => {
-        if (isReconnecting && !isCancelled) {
-          showToast('Could not reconnect in time.');
-          cancelAndReset();
-        }
-      }, SENDER_RECONNECT_WINDOW_MS);
-    }
-
-    function attemptReceiverReconnect() {
-      if (isCancelled || batchFullyDone || isReconnecting) return;
-      if (!sessionCode || !peer || peer.destroyed) return;
-
-      if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-        showToast('Connection lost. Please start the transfer again.');
-        cancelAndReset();
-        return;
-      }
-
-      isReconnecting = true;
-      const attemptNum = reconnectAttempts + 1;
-      uiState.status = `Reconnecting... (${attemptNum}/${MAX_RECONNECT_ATTEMPTS})`;
-      scheduleUiUpdate();
-      if (attemptNum === 1) showToast('Connection interrupted. Reconnecting...');
-
-      const delay = RECONNECT_DELAYS_MS[Math.min(reconnectAttempts, RECONNECT_DELAYS_MS.length - 1)];
-      reconnectAttempts++;
-
-      clearReconnectTimers();
-      reconnectTimer = setTimeout(() => {
-        if (isCancelled || !peer || peer.destroyed) return;
-        try {
-          const targetPeerId = 'droply-' + sessionCode;
-          const c = peer.connect(targetPeerId, { reliable: true });
-          conn = c;
-          bindPeerConnection(c);
-        } catch (_) {
-          isReconnecting = false;
-          attemptReceiverReconnect();
-        }
-      }, delay);
-    }
-
-    function bindPeerConnection(c) {
-      const handleOpen = () => {
-        if (isCancelled) return;
-        clearReconnectTimers();
-        hasConnectedOnce = true;
-        reconnectAttempts = 0;
-        isReconnecting = false;
-
-        negotiateChunkSize(c);
-        const dc = c.dataChannel || c._dc;
-        if (dc) {
-          try { dc.binaryType = 'arraybuffer'; } catch (_) {}
-        }
-
-        if (isSender && fileQueue.length > 0 && !batchFullyDone) {
-          beginNextFileInQueue();
-        } else if (!isSender && !isTransferring) {
-          showToast('Connected! Waiting for sender...');
-        }
-      };
-
-      if (c.open) {
-        handleOpen();
-      } else {
-        c.on('open', handleOpen);
-      }
-
-      c.on('data', (data) => {
-        if (isCancelled) return;
-
-        if (typeof data === 'string') {
-          let msg;
-          try { msg = JSON.parse(data); } catch (_) { return; }
-
-          if (msg.type === 'TRANSFER_CANCEL') {
-            showToast('Other device cancelled transfer.');
-            cancelAndReset();
-            return;
-          }
-
-          if (msg.type === 'PROGRESS') {
-            uiState.transferred = Math.min(msg.bytes || 0, uiState.total);
-            scheduleUiUpdate();
-            return;
-          }
-
-          if (msg.type === 'FILE_ACK') {
-            if (pendingFileAckResolve) {
-              pendingFileAckResolve();
-              pendingFileAckResolve = null;
-            }
-            return;
-          }
-
-          if (msg.type === 'BATCH_META') {
-            receiverBatchCount = msg.count || 1;
-            receiverBatchIndex = 0;
-            return;
-          }
-
-          if (msg.type === 'FILE_START') {
-            isTransferring = true;
-            receiverBatchIndex++;
-            receiverMeta = {
-              name: (msg.name || 'file').replace(/[/\\:*?"<>|]/g, '_').slice(0, 255),
-              size: msg.size || 0,
-              mime: msg.mime || 'application/octet-stream'
-            };
-            receiverChunks = [];
-            receiverBytes = 0;
-            lastProgressSentAt = 0;
-            resetSpeedMeter();
-
-            initTransferView(
-              'RECEIVING FILE',
-              'Receiving file...',
-              receiverMeta.name,
-              receiverMeta.size,
-              receiverBatchIndex,
-              receiverBatchCount
-            );
-            return;
-          }
-
-          if (msg.type === 'FILE_END' && receiverMeta) {
-            uiState.isComplete = true;
-            uiState.transferred = receiverMeta.size;
-            uiState.status = 'Delivered';
-            scheduleUiUpdate();
-
-            const blob = new Blob(receiverChunks, { type: receiverMeta.mime });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = receiverMeta.name;
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 30000);
-
-            try { c.send(JSON.stringify({ type: 'FILE_ACK', size: receiverMeta.size })); } catch (_) {}
-
-            receiverChunks = [];
-            const isBatchFinished = receiverBatchIndex >= receiverBatchCount;
-            receiverMeta = null;
-
-            if (isBatchFinished) {
-              isTransferring = false;
-              showBatchComplete(receiverBatchCount, false);
-            }
-            return;
-          }
-          return;
-        }
-
-        if (receiverMeta) {
-          receiverChunks.push(data);
-          receiverBytes += data.byteLength;
-          uiState.transferred = receiverBytes;
-          scheduleUiUpdate();
-
-          const now = performance.now();
-          if (now - lastProgressSentAt >= PROGRESS_THROTTLE_MS) {
-            lastProgressSentAt = now;
-            try { c.send(JSON.stringify({ type: 'PROGRESS', bytes: receiverBytes })); } catch (_) {}
-          }
-        }
-      });
-
-      c.on('error', (err) => {
-        console.error('Connection error:', err);
-        if (isCancelled) return;
-        if (!hasConnectedOnce) {
-          showToast('Connection issue encountered.');
-          resetReceiverButton();
-          return;
-        }
-        if (isSender) {
-          handleSenderConnDrop();
-        } else {
-          attemptReceiverReconnect();
-        }
-      });
-
-      c.on('close', () => {
-        if (isCancelled) return;
-        if (!hasConnectedOnce) {
-          showToast('Connection closed.');
-          resetReceiverButton();
-          return;
-        }
-        if (isSender) {
-          handleSenderConnDrop();
-        } else {
-          attemptReceiverReconnect();
-        }
-      });
-    }
-
-    async function beginNextFileInQueue() {
-      if (isCancelled || !conn || !conn.open) return;
-      isTransferring = true;
-
-      if (currentFileIndex === 0) {
-        try {
-          conn.send(JSON.stringify({ type: 'BATCH_META', count: currentBatchTotal }));
-        } catch (_) {}
-      }
-
-      if (currentFileIndex >= fileQueue.length) {
-        stagedFiles = [];
-        updateConnectedStagedView();
-        isTransferring = false;
-        showBatchComplete(currentBatchTotal, true);
-        return;
-      }
-
-      const file = fileQueue[currentFileIndex];
-      initTransferView(
-        'SENDING FILE',
-        'Preparing...',
-        file.name,
-        file.size,
-        currentFileIndex + 1,
-        currentBatchTotal
-      );
-
-      let completed = false;
-      try {
-        completed = await sendSingleFile(file);
-      } catch (err) {
-        console.error('Send error:', err);
-        if (!isCancelled) {
-          uiState.status = 'Transfer error.';
-          scheduleUiUpdate();
-          showToast('Failed to send ' + file.name);
-        }
-        return;
-      }
-
-      if (isCancelled || !completed) return;
-
-      currentFileIndex++;
-      beginNextFileInQueue();
-    }
-
-    function waitForDrain(dc, shouldAbort) {
-      if (!dc || dc.bufferedAmount <= LOW_WATER_MARK) return Promise.resolve();
-      return new Promise((resolve) => {
-        let settled = false;
-        let lastBuffered = dc.bufferedAmount;
-        let lastChangeAt = performance.now();
-        let pollTimer = null;
-
-        function finish() {
-          if (settled) return;
-          settled = true;
-          if (pollTimer) clearInterval(pollTimer);
-          dc.removeEventListener('bufferedamountlow', finish);
-          resolve();
-        }
-
-        dc.addEventListener('bufferedamountlow', finish, { once: true });
-
-        pollTimer = setInterval(() => {
-          if (shouldAbort() || !dc || dc.bufferedAmount <= LOW_WATER_MARK) {
-            finish();
-            return;
-          }
-          if (dc.bufferedAmount !== lastBuffered) {
-            lastBuffered = dc.bufferedAmount;
-            lastChangeAt = performance.now();
-          } else if (performance.now() - lastChangeAt > STALL_TIMEOUT_MS) {
-            finish();
-          }
-        }, 30);
-      });
-    }
-
-    async function sendSingleFile(file) {
-      if (!conn || !conn.open) return false;
-
-      const dc = conn.dataChannel || conn._dc;
-      if (dc) {
-        dc.bufferedAmountLowThreshold = LOW_WATER_MARK;
-        try { dc.binaryType = 'arraybuffer'; } catch (_) {}
-      }
-      const shouldAbort = () => isCancelled || !conn || !conn.open;
-
-      let ackResolveFn;
-      const ackPromise = new Promise((res) => { ackResolveFn = res; });
-      pendingFileAckResolve = ackResolveFn;
-
-      try {
-        conn.send(JSON.stringify({
-          type: 'FILE_START',
-          name: file.name,
-          size: file.size,
-          mime: file.type || 'application/octet-stream'
-        }));
-      } catch (_) {
-        pendingFileAckResolve = null;
-        return false;
-      }
-
-      uiState.status = 'Sending file...';
-      uiState.transferred = 0;
-      uiState.total = file.size;
-      uiState.isComplete = false;
-      resetSpeedMeter();
-      scheduleUiUpdate();
-
-      let offset = 0;
-
-      while (offset < file.size) {
-        if (shouldAbort()) { pendingFileAckResolve = null; return false; }
-
-        if (dc && dc.bufferedAmount >= HIGH_WATER_MARK) {
-          await waitForDrain(dc, shouldAbort);
-          if (shouldAbort()) { pendingFileAckResolve = null; return false; }
-          if (dc.bufferedAmount >= HIGH_WATER_MARK) {
-            pendingFileAckResolve = null;
-            try { conn.close(); } catch (_) {}
-            return false;
-          }
-        }
-
-        const end = Math.min(offset + CHUNK_SIZE, file.size);
-        const slice = file.slice(offset, end);
-        const buffer = await slice.arrayBuffer();
-
-        if (shouldAbort()) { pendingFileAckResolve = null; return false; }
-
-        try {
-          conn.send(buffer);
-        } catch (_) {
-          pendingFileAckResolve = null;
-          return false;
-        }
-        offset = end;
-      }
-
-      if (shouldAbort()) { pendingFileAckResolve = null; return false; }
-
-      try {
-        conn.send(JSON.stringify({ type: 'FILE_END' }));
-      } catch (_) {
-        pendingFileAckResolve = null;
-        return false;
-      }
-
-      await Promise.race([
-        ackPromise,
-        new Promise((r) => setTimeout(r, FILE_ACK_TIMEOUT_MS))
-      ]);
-      pendingFileAckResolve = null;
-
-      if (shouldAbort()) return false;
-      uiState.transferred = file.size;
-      scheduleUiUpdate();
-      return true;
     }
 
     function initTransferView(title, statusText, fileName, fileSize, batchIdx, batchTotal) {
@@ -2089,7 +1331,6 @@
 
     function showBatchComplete(count, roleIsSender) {
       batchFullyDone = true;
-      isTransferring = false;
       uiState.isComplete = true;
       uiState.status = 'Delivered';
       scheduleUiUpdate();
@@ -2105,89 +1346,650 @@
       if (els.completionActions) els.completionActions.classList.remove('hidden');
 
       if (els.completionTitle) {
-        if (count > 1) {
-          els.completionTitle.textContent = roleIsSender ? `${count} Files Sent!` : `${count} Files Received!`;
-        } else {
-          els.completionTitle.textContent = 'Transfer Complete!';
-        }
+        els.completionTitle.textContent = count > 1 ? `${count} Files Sent!` : 'Transfer Complete!';
       }
       if (els.completionSub) {
         els.completionSub.textContent = roleIsSender ? 'Delivered to receiver.' : 'Saved directly to your device.';
       }
-
-      if (els.btnReturnDropzone) {
+      if (els.btnSendMore) {
         if (roleIsSender) {
-          els.btnReturnDropzone.classList.remove('hidden');
+          els.btnSendMore.classList.remove('hidden');
         } else {
-          els.btnReturnDropzone.classList.add('hidden');
+          els.btnSendMore.classList.add('hidden');
         }
       }
     }
 
-    function copyShareLink() {
-      const code = sessionCode || (els.displayCode ? els.displayCode.textContent : '');
-      const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showToast('Link copied to clipboard!');
-        }).catch(() => fallbackCopy(shareUrl));
-      } else {
-        fallbackCopy(shareUrl);
+    function renderSendQueuePreview() {
+      if (!els.sendQueuePreview) return;
+      if (!fileQueue.length) {
+        els.sendQueuePreview.innerHTML = '';
+        return;
       }
+      els.sendQueuePreview.innerHTML = fileQueue.map(f =>
+        `<div class="queue-item"><span class="queue-item-name">${escapeHtml(f.name)}</span><span class="queue-item-size">${formatBytes(f.size)}</span></div>`
+      ).join('');
     }
 
-    function fallbackCopy(text) {
-      const el = document.createElement('textarea');
-      el.value = text;
-      el.style.position = 'fixed';
-      el.style.opacity = '0';
-      document.body.appendChild(el);
-      el.select();
-      try {
-        document.execCommand('copy');
-        showToast('Link copied to clipboard!');
-      } catch (_) {
-        showToast('Copy link: ' + text);
-      }
-      document.body.removeChild(el);
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
     }
 
-    window.addEventListener('keydown', (e) => {
-      const devModal = document.getElementById('dev-info-modal');
+    // SENDER ENTRY
+    function onFilesPicked(event) {
+      const files = event.target.files ? Array.from(event.target.files) : [];
+      if (!files.length) return;
 
-      if (e.key === 'Escape') {
-        if (devModal && devModal.classList.contains('show')) {
-          e.preventDefault();
-          closeDevInfo();
+      isCancelled = false;
+      batchFullyDone = false;
+
+      if (conn && conn.open) {
+        fileQueue = files;
+        currentBatchTotal = files.length;
+        currentFileIndex = 0;
+        beginNextFileInQueue();
+        return;
+      }
+
+      isSender = true;
+      fileQueue = files;
+      currentBatchTotal = files.length;
+      currentFileIndex = 0;
+
+      const code = generateSixDigitCode();
+      const peerId = 'droply-' + code;
+      sessionCode = code;
+
+      if (peer) {
+        try { peer.destroy(); } catch (_) {}
+      }
+
+      peer = new Peer(peerId, PEER_CONFIG);
+
+      peer.on('error', (err) => {
+        console.error('Peer error:', err);
+        if (err && err.type === 'unavailable-id') {
+          onFilesPicked({ target: { files } });
           return;
         }
-        e.preventDefault();
+        showToast('Network notice: ' + (err.type || 'connection interrupted'));
+      });
+
+      peer.on('disconnected', () => {
+        // Lost touch with the signaling server (not the P2P link itself).
+        // Reconnecting here keeps the same peer ID alive so the receiver's
+        // code/QR/link stays valid.
+        if (!isCancelled && peer && !peer.destroyed) {
+          try { peer.reconnect(); } catch (_) {}
+        }
+      });
+
+      peer.on('open', () => {
+        if (els.displayCode) els.displayCode.textContent = code;
+        renderSendQueuePreview();
+        showView('view-send');
+
+        if (els.qrcode) {
+          els.qrcode.innerHTML = '';
+          if (window.QRCode) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
+            new QRCode(els.qrcode, {
+              text: shareUrl,
+              width: 160,
+              height: 160,
+              colorDark: '#000000',
+              colorLight: '#ffffff'
+            });
+          }
+        }
+      });
+
+      peer.on('connection', (c) => {
+        // Reject a genuinely duplicate connection attempt while one is
+        // already live, but DO accept a new one when the previous
+        // connection has died - that's the receiver redialing after a
+        // network drop, and is exactly what lets a transfer recover
+        // instead of freezing.
+        if (conn && conn.open) {
+          try { c.close(); } catch (_) {}
+          return;
+        }
+        const wasReconnecting = isReconnecting;
+        clearReconnectTimers();
+        isReconnecting = false;
+        conn = c;
+        bindSenderEvents(conn);
+        if (wasReconnecting) {
+          showToast('Reconnected. Resuming transfer...');
+        }
+      });
+    }
+
+    function bindSenderEvents(c) {
+      c.on('data', (data) => {
+        if (typeof data !== 'string') return;
+        let msg;
+        try { msg = JSON.parse(data); } catch (_) { return; }
+
+        if (msg.type === 'TRANSFER_CANCEL') {
+          showToast('Receiver cancelled transfer.');
+          cancelAndReset();
+          return;
+        }
+
+        // Receiver reports its real, confirmed bytes-received count.
+        // The sender mirrors this number exactly, so both sides always
+        // show the identical progress and speed - no more racing ahead.
+        if (msg.type === 'PROGRESS') {
+          uiState.transferred = Math.min(msg.bytes || 0, uiState.total);
+          scheduleUiUpdate();
+          return;
+        }
+
+        // Receiver confirms it fully processed and saved the file.
+        if (msg.type === 'FILE_ACK') {
+          if (pendingFileAckResolve) {
+            pendingFileAckResolve();
+            pendingFileAckResolve = null;
+          }
+          return;
+        }
+      });
+
+      c.on('open', () => {
+        if (isCancelled) return;
+        clearReconnectTimers();
+        isReconnecting = false;
+        negotiateChunkSize(c);
+        beginNextFileInQueue();
+      });
+
+      c.on('close', () => {
+        if (isCancelled) return;
+        handleSenderConnDrop();
+      });
+
+      c.on('error', (err) => {
+        console.error('Sender connection error:', err);
+        if (isCancelled) return;
+        handleSenderConnDrop();
+      });
+    }
+
+    // A drop mid-transfer (network handoff, brief signal loss, etc). Rather
+    // than killing the whole batch, keep the peer alive and give the
+    // receiver a window to redial - peer.on('connection') above will accept
+    // it and resume. If nobody reconnects in time, give up cleanly.
+    function handleSenderConnDrop() {
+      if (isCancelled || batchFullyDone || isReconnecting) return;
+      isReconnecting = true;
+      uiState.status = 'Connection lost. Waiting to reconnect...';
+      scheduleUiUpdate();
+      showToast('Connection interrupted. Waiting for the other device...');
+
+      clearReconnectTimers();
+      reconnectGiveUpTimer = setTimeout(() => {
+        if (isReconnecting && !isCancelled) {
+          showToast('Could not reconnect in time.');
+          cancelAndReset();
+        }
+      }, SENDER_RECONNECT_WINDOW_MS);
+    }
+
+    // SENDER FILE QUEUE
+    async function beginNextFileInQueue() {
+      if (isCancelled || !conn) return;
+
+      if (!conn.open) {
+        await new Promise((resolve) => conn.once('open', resolve));
+      }
+      if (isCancelled) return;
+
+      if (currentFileIndex === 0) {
+        try {
+          conn.send(JSON.stringify({ type: 'BATCH_META', count: currentBatchTotal }));
+        } catch (_) {}
+      }
+
+      if (currentFileIndex >= fileQueue.length) {
+        showBatchComplete(currentBatchTotal, true);
+        return;
+      }
+
+      const file = fileQueue[currentFileIndex];
+
+      initTransferView(
+        'SENDING FILE',
+        'Preparing...',
+        file.name,
+        file.size,
+        currentFileIndex + 1,
+        currentBatchTotal
+      );
+
+      let completed = false;
+      try {
+        completed = await sendSingleFile(file);
+      } catch (err) {
+        console.error('Send error:', err);
+        if (!isCancelled) {
+          uiState.status = 'Transfer error.';
+          scheduleUiUpdate();
+          showToast('Failed to send ' + file.name);
+        }
+        return;
+      }
+
+      if (isCancelled) return;
+
+      if (!completed) {
+        // The connection dropped before this file finished. Don't advance -
+        // the reconnect flow (handleSenderConnDrop / peer.on('connection'))
+        // will either restart this exact file once the link is back, or
+        // give up and reset after the reconnect window closes.
+        return;
+      }
+
+      currentFileIndex++;
+      beginNextFileInQueue();
+    }
+
+    // Cancellation- and stall-aware drain wait. Resolves when the buffer
+    // drops below LOW_WATER_MARK, OR when the transfer is cancelled/closed,
+    // OR when the buffer hasn't moved at all for STALL_TIMEOUT_MS (dead
+    // connection) - this is what prevents the transfer from freezing
+    // forever on a connection that looks open but silently died.
+    function waitForDrain(dc, shouldAbort) {
+      if (!dc || dc.bufferedAmount <= LOW_WATER_MARK) return Promise.resolve();
+      return new Promise((resolve) => {
+        let settled = false;
+        let lastBuffered = dc.bufferedAmount;
+        let lastChangeAt = performance.now();
+        let pollTimer = null;
+
+        function finish() {
+          if (settled) return;
+          settled = true;
+          if (pollTimer) clearInterval(pollTimer);
+          dc.removeEventListener('bufferedamountlow', finish);
+          resolve();
+        }
+
+        dc.addEventListener('bufferedamountlow', finish, { once: true });
+
+        pollTimer = setInterval(() => {
+          if (shouldAbort() || !dc || dc.bufferedAmount <= LOW_WATER_MARK) {
+            finish();
+            return;
+          }
+          if (dc.bufferedAmount !== lastBuffered) {
+            lastBuffered = dc.bufferedAmount;
+            lastChangeAt = performance.now();
+          } else if (performance.now() - lastChangeAt > STALL_TIMEOUT_MS) {
+            finish(); // buffer hasn't moved - give up waiting, caller will detect and abort
+          }
+        }, 30);
+      });
+    }
+
+    // High-Performance Stream Pipeline
+    // Returns true only when the file was fully sent AND the receiver's
+    // completion signal was waited on. Returns false for every abort path
+    // (cancelled, connection dropped, stalled) so the caller never mistakes
+    // an interrupted send for a completed one.
+    async function sendSingleFile(file) {
+      if (!conn || !conn.open) return false;
+
+      const dc = conn.dataChannel || conn._dc;
+      if (dc) {
+        dc.bufferedAmountLowThreshold = LOW_WATER_MARK;
+        try { dc.binaryType = 'arraybuffer'; } catch (_) {}
+      }
+      const shouldAbort = () => isCancelled || !conn || !conn.open;
+
+      // Set up the completion handshake before sending anything, so a
+      // FILE_ACK that arrives quickly can never be missed.
+      let ackResolveFn;
+      const ackPromise = new Promise((res) => { ackResolveFn = res; });
+      pendingFileAckResolve = ackResolveFn;
+
+      // 1. Send metadata header
+      try {
+        conn.send(JSON.stringify({
+          type: 'FILE_START',
+          name: file.name,
+          size: file.size,
+          mime: file.type || 'application/octet-stream'
+        }));
+      } catch (_) {
+        pendingFileAckResolve = null;
+        return false;
+      }
+
+      uiState.status = 'Sending file...';
+      uiState.transferred = 0;
+      uiState.total = file.size;
+      uiState.isComplete = false;
+      resetSpeedMeter();
+      scheduleUiUpdate();
+
+      let offset = 0;
+
+      // 2. Continuous saturated chunk streaming
+      while (offset < file.size) {
+        if (shouldAbort()) { pendingFileAckResolve = null; return false; }
+
+        // Apply backpressure once the queue reaches HIGH_WATER_MARK
+        if (dc && dc.bufferedAmount >= HIGH_WATER_MARK) {
+          await waitForDrain(dc, shouldAbort);
+          if (shouldAbort()) { pendingFileAckResolve = null; return false; }
+          if (dc.bufferedAmount >= HIGH_WATER_MARK) {
+            // Drain watchdog gave up: connection is stalled/dead, not just
+            // slow. Force-close it so the normal close handler takes over
+            // and tries to reconnect, instead of leaving a zombie
+            // connection that looks open but never delivers another byte.
+            pendingFileAckResolve = null;
+            try { conn.close(); } catch (_) {}
+            return false;
+          }
+        }
+
+        const end = Math.min(offset + CHUNK_SIZE, file.size);
+        const slice = file.slice(offset, end);
+        const buffer = await slice.arrayBuffer();
+
+        if (shouldAbort()) { pendingFileAckResolve = null; return false; }
+
+        try {
+          conn.send(buffer);
+        } catch (_) {
+          pendingFileAckResolve = null;
+          return false;
+        }
+        offset = end;
+        // Note: no local progress write here. The channel is ordered and
+        // reliable, so the receiver's own byte count (echoed back via
+        // PROGRESS pings) is the single source of truth for both sides.
+      }
+
+      if (shouldAbort()) { pendingFileAckResolve = null; return false; }
+
+      // 3. Signal completion. Order is guaranteed by the reliable channel,
+      // so this can be sent immediately without waiting for the buffer to
+      // fully empty first.
+      try {
+        conn.send(JSON.stringify({ type: 'FILE_END' }));
+      } catch (_) {
+        pendingFileAckResolve = null;
+        return false;
+      }
+
+      // 4. Wait for the receiver to confirm it actually saved the file,
+      // with a timeout so a lost ACK can never hang the queue forever.
+      await Promise.race([
+        ackPromise,
+        new Promise((r) => setTimeout(r, FILE_ACK_TIMEOUT_MS))
+      ]);
+      pendingFileAckResolve = null;
+
+      if (shouldAbort()) return false;
+      uiState.transferred = file.size;
+      scheduleUiUpdate();
+      return true;
+    }
+
+    // RECEIVER ENTRY
+    function initReceiverPeer() {
+      if (peer && !peer.destroyed) return;
+      peer = new Peer(PEER_CONFIG);
+
+      peer.on('error', (err) => {
+        console.error('Receiver peer error:', err);
+        const msg = err.type === 'peer-unavailable'
+          ? 'Device not found. Check code and try again.'
+          : 'Connection notice: ' + (err.type || 'check internet');
+        showToast(msg);
+        resetReceiverButton();
+      });
+
+      peer.on('disconnected', () => {
+        // Lost touch with the signaling server (not the P2P link itself).
+        if (!isCancelled && peer && !peer.destroyed) {
+          try { peer.reconnect(); } catch (_) {}
+        }
+      });
+    }
+
+    function resetReceiverButton() {
+      const btn = els.btnConnect || document.getElementById('btn-connect');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Connect & Receive';
+      }
+    }
+
+    async function connectWithCode(customCode = null) {
+      let targetCode = customCode;
+      if (!targetCode) {
+        const inputs = document.querySelectorAll('.otp-input');
+        targetCode = '';
+        inputs.forEach(i => targetCode += i.value);
+      }
+      if (!/^\d{6}$/.test(targetCode)) return;
+
+      isCancelled = false;
+      isSender = false;
+      sessionCode = targetCode;
+      hasConnectedOnce = false;
+      reconnectAttempts = 0;
+      batchFullyDone = false;
+
+      const targetPeerId = 'droply-' + targetCode;
+      const btn = els.btnConnect || document.getElementById('btn-connect');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Connecting...';
+      }
+
+      if (!peer || peer.destroyed) {
+        initReceiverPeer();
+      }
+
+      const startConnection = () => {
+        try {
+          conn = peer.connect(targetPeerId, { reliable: true });
+          bindReceiverEvents(conn);
+        } catch (err) {
+          console.error('Connect failed:', err);
+          showToast('Connection failed. Please retry.');
+          resetReceiverButton();
+        }
+      };
+
+      if (peer && peer.open) {
+        startConnection();
+      } else if (peer) {
+        peer.once('open', startConnection);
+        peer.once('error', resetReceiverButton);
+      }
+    }
+
+    function bindReceiverEvents(c) {
+      c.on('open', () => {
+        if (isCancelled) return;
+        clearReconnectTimers();
+        hasConnectedOnce = true;
+        reconnectAttempts = 0;
+        isReconnecting = false;
+        const dc = c.dataChannel || c._dc;
+        if (dc) {
+          try { dc.binaryType = 'arraybuffer'; } catch (_) {}
+        }
+      });
+
+      c.on('data', (data) => {
+        if (isCancelled) return;
+
+        // String control messages
+        if (typeof data === 'string') {
+          let msg;
+          try { msg = JSON.parse(data); } catch (_) { return; }
+
+          if (msg.type === 'BATCH_META') {
+            receiverBatchCount = msg.count || 1;
+            receiverBatchIndex = 0;
+            return;
+          }
+
+          if (msg.type === 'FILE_START') {
+            receiverBatchIndex++;
+            receiverMeta = {
+              name: (msg.name || 'file').replace(/[/\\:*?"<>|]/g, '_').slice(0, 255),
+              size: msg.size || 0,
+              mime: msg.mime || 'application/octet-stream'
+            };
+            receiverChunks = [];
+            receiverBytes = 0;
+            lastProgressSentAt = 0;
+            resetSpeedMeter();
+
+            initTransferView(
+              'RECEIVING FILE',
+              'Receiving file...',
+              receiverMeta.name,
+              receiverMeta.size,
+              receiverBatchIndex,
+              receiverBatchCount
+            );
+            return;
+          }
+
+          if (msg.type === 'FILE_END' && receiverMeta) {
+            uiState.isComplete = true;
+            uiState.transferred = receiverMeta.size;
+            uiState.status = 'Delivered';
+            scheduleUiUpdate();
+
+            // Zero-clone Blob creation & fast download trigger
+            const blob = new Blob(receiverChunks, { type: receiverMeta.mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = receiverMeta.name;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 30000);
+
+            // Confirm to the sender that this file is fully saved, so it
+            // can safely move on to the next file (or finish the batch).
+            try { c.send(JSON.stringify({ type: 'FILE_ACK', size: receiverMeta.size })); } catch (_) {}
+
+            receiverChunks = [];
+            const isBatchFinished = receiverBatchIndex >= receiverBatchCount;
+            receiverMeta = null;
+
+            if (isBatchFinished) {
+              showBatchComplete(receiverBatchCount, false);
+            }
+            return;
+          }
+
+          if (msg.type === 'TRANSFER_CANCEL') {
+            showToast('Sender cancelled transfer.');
+            cancelAndReset();
+          }
+          return;
+        }
+
+        // Zero-copy binary chunk collection
+        if (receiverMeta) {
+          receiverChunks.push(data);
+          receiverBytes += data.byteLength;
+
+          uiState.transferred = receiverBytes;
+          scheduleUiUpdate();
+
+          // Echo real, confirmed progress back to the sender (throttled),
+          // so both sides always display the exact same numbers.
+          const now = performance.now();
+          if (now - lastProgressSentAt >= PROGRESS_THROTTLE_MS) {
+            lastProgressSentAt = now;
+            try { c.send(JSON.stringify({ type: 'PROGRESS', bytes: receiverBytes })); } catch (_) {}
+          }
+        }
+      });
+
+      c.on('error', (err) => {
+        console.error('Connection error:', err);
+        if (isCancelled) return;
+        if (!hasConnectedOnce) {
+          // Never actually connected - a bad code or offline sender, not a
+          // drop. Fail fast instead of spending ~20s retrying a connection
+          // that was never going to work.
+          showToast('Connection issue encountered.');
+          resetReceiverButton();
+          return;
+        }
+        attemptReceiverReconnect();
+      });
+
+      c.on('close', () => {
+        if (isCancelled) return;
+        if (!hasConnectedOnce) {
+          showToast('Connection failed. Please retry.');
+          resetReceiverButton();
+          return;
+        }
+        attemptReceiverReconnect();
+      });
+    }
+
+    // Redials the sender after an unexpected drop, with backoff, instead of
+    // ending the transfer on the first network blip. The sender's peer
+    // stays alive listening, so a fresh connect() here is enough to resume -
+    // FILE_START for the in-progress file naturally restarts it cleanly.
+    function attemptReceiverReconnect() {
+      if (isCancelled || batchFullyDone || isReconnecting) return;
+      if (!sessionCode || !peer || peer.destroyed) return;
+
+      if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        showToast('Connection lost. Please start the transfer again.');
         cancelAndReset();
         return;
       }
 
-      if (e.key === 'Enter') {
-        if (currentViewId === 'view-receive') {
-          e.preventDefault();
-          if (els.btnConnect && !els.btnConnect.disabled) {
-            connectWithCode();
-          }
-        } else if (currentViewId === 'view-connected') {
-          e.preventDefault();
-          if (stagedFiles && stagedFiles.length > 0) {
-            startTransferStagedFiles();
-          }
-        } else if (currentViewId === 'view-transfer' && uiState.isComplete) {
-          e.preventDefault();
-          goToConnectedScreen();
-        }
-      }
-    });
+      isReconnecting = true;
+      const attemptNum = reconnectAttempts + 1;
+      uiState.status = `Reconnecting... (${attemptNum}/${MAX_RECONNECT_ATTEMPTS})`;
+      scheduleUiUpdate();
+      if (attemptNum === 1) showToast('Connection interrupted. Reconnecting...');
 
+      const delay = RECONNECT_DELAYS_MS[Math.min(reconnectAttempts, RECONNECT_DELAYS_MS.length - 1)];
+      reconnectAttempts++;
+
+      clearReconnectTimers();
+      reconnectTimer = setTimeout(() => {
+        if (isCancelled || !peer || peer.destroyed) return;
+        try {
+          const targetPeerId = 'droply-' + sessionCode;
+          const c = peer.connect(targetPeerId, { reliable: true });
+          conn = c;
+          bindReceiverEvents(c);
+        } catch (_) {
+          isReconnecting = false;
+          attemptReceiverReconnect();
+        }
+      }, delay);
+    }
+
+    // Direct link auto-open (?code=123456)
     window.addEventListener('DOMContentLoaded', () => {
       initDomElements();
       initDragAndDrop();
-      updateNavArrowState();
 
       const urlParams = new URLSearchParams(window.location.search);
       const autoCode = (urlParams.get('code') || '').replace(/\D/g, '');
