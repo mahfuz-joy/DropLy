@@ -754,6 +754,9 @@
   <div class="card" id="app-card">
     <div id="toast" class="toast-msg"></div>
 
+    <!-- Hidden file input for direct picker on home view -->
+    <input type="file" id="main-file-input" multiple style="display:none;" onchange="onMainFilesPicked(event)">
+
     <!-- Top Navigation Bar -->
     <div class="top-nav-bar">
       <div class="nav-arrows">
@@ -803,7 +806,7 @@
       <h1 class="brand-name">DropLy</h1>
       <p class="tagline">Fast direct P2P transfer between devices.</p>
       
-      <button class="primary-btn" onclick="openSendViewNormally()">
+      <button class="primary-btn" onclick="document.getElementById('main-file-input').click()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Send Files
       </button>
@@ -845,11 +848,11 @@
         <input type="text" maxlength="1" class="otp-input" inputmode="numeric">
         <input type="text" maxlength="1" class="otp-input" inputmode="numeric">
       </div>
-      <button id="btn-connect" class="primary-btn" onclick="connectWithCode()" disabled>Connect &amp; Continue (Enter)</button>
+      <button id="btn-connect" class="primary-btn" onclick="connectWithCode()" disabled>Connect &amp; Receive (Enter)</button>
       <button class="cancel-btn" onclick="cancelAndReset()">Cancel</button>
     </div>
 
-    <!-- VIEW: CONNECTED (DRAG & DROP ZONE) -->
+    <!-- VIEW: CONNECTED (STAGING FILES) -->
     <div id="view-connected" class="hidden">
       <div class="view-header">
         <span class="header-title">CONNECTED &middot; SELECT FILES</span>
@@ -994,7 +997,6 @@
     const FILE_ACK_TIMEOUT_MS = 12000;
     const PROGRESS_THROTTLE_MS = 100;
 
-    // Automatic reconnect parameters
     const MAX_RECONNECT_ATTEMPTS = 5;
     const RECONNECT_DELAYS_MS = [1000, 2000, 4000, 6000, 8000];
     const SENDER_RECONNECT_WINDOW_MS = 30000;
@@ -1003,6 +1005,7 @@
     let conn = null;
     let isCancelled = false;
     let isSender = false;
+    let isTransferring = false;
     let wakeLock = null;
     let sessionCode = null;
     let pendingFileAckResolve = null;
@@ -1015,20 +1018,17 @@
     let reconnectGiveUpTimer = null;
     let hasConnectedOnce = false;
 
-    // Staging and queues
     let stagedFiles = [];
     let fileQueue = [];
     let currentFileIndex = 0;
     let currentBatchTotal = 0;
 
-    // Receiver state
     let receiverMeta = null;
     let receiverChunks = [];
     let receiverBytes = 0;
     let receiverBatchCount = 1;
     let receiverBatchIndex = 0;
 
-    // Navigation History
     let currentViewId = 'view-home';
     let viewHistory = ['view-home'];
     let historyIndex = 0;
@@ -1052,11 +1052,13 @@
         completionSub: document.getElementById('completion-sub'),
         transferActions: document.getElementById('transfer-actions'),
         completionActions: document.getElementById('completion-actions'),
+        btnReturnDropzone: document.getElementById('btn-return-dropzone'),
         progressBarFill: document.getElementById('progress-bar-fill'),
         transferStatus: document.getElementById('transfer-status'),
         transferPercentage: document.getElementById('transfer-percentage'),
         transferSpeed: document.getElementById('transfer-speed'),
         transferEta: document.getElementById('transfer-eta'),
+        mainFileInput: document.getElementById('main-file-input'),
         connectedFileInput: document.getElementById('connected-file-input'),
         selectedFilesCount: document.getElementById('selected-files-count'),
         connectedQueuePreview: document.getElementById('connected-queue-preview'),
@@ -1173,12 +1175,13 @@
         if (!files.length) return;
 
         if (currentViewId === 'view-home') {
-          stagedFiles = files;
-          openSendViewNormally();
+          startSenderSession(files);
         } else if (currentViewId === 'view-send') {
           stagedFiles = files;
+          fileQueue = [...stagedFiles];
+          currentBatchTotal = fileQueue.length;
           renderSendQueuePreview();
-          showToast(`${files.length} file(s) staged`);
+          showToast(`${files.length} file(s) selected`);
         } else if (currentViewId === 'view-connected') {
           appendStagedFiles(files);
         }
@@ -1340,6 +1343,7 @@
 
     function cancelAndReset() {
       isCancelled = true;
+      isTransferring = false;
       releaseWakeLock();
       clearReconnectTimers();
       isReconnecting = false;
@@ -1371,12 +1375,13 @@
       pendingFileAckResolve = null;
       resetSpeedMeter();
 
+      if (els.mainFileInput) els.mainFileInput.value = '';
       if (els.connectedFileInput) els.connectedFileInput.value = '';
 
       const btn = els.btnConnect || document.getElementById('btn-connect');
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Connect & Continue (Enter)';
+        btn.textContent = 'Connect & Receive (Enter)';
       }
 
       viewHistory = ['view-home'];
@@ -1384,10 +1389,21 @@
       showView('view-home', false);
     }
 
-    function openSendViewNormally() {
+    function onMainFilesPicked(e) {
+      const files = e.target.files ? Array.from(e.target.files) : [];
+      if (!files.length) return;
+      startSenderSession(files);
+    }
+
+    function startSenderSession(files) {
       isCancelled = false;
       batchFullyDone = false;
       isSender = true;
+      isTransferring = false;
+      stagedFiles = files;
+      fileQueue = [...files];
+      currentBatchTotal = files.length;
+      currentFileIndex = 0;
 
       const code = generateSixDigitCode();
       const peerId = 'droply-' + code;
@@ -1402,7 +1418,7 @@
       peer.on('error', (err) => {
         console.error('[PeerJS Error]', err);
         if (err && err.type === 'unavailable-id') {
-          openSendViewNormally();
+          startSenderSession(files);
           return;
         }
         showToast('Network notice: ' + (err.type || 'connection issue'));
@@ -1429,7 +1445,7 @@
         conn = c;
         bindPeerConnection(conn);
         if (wasReconnecting) {
-          showToast('Reconnected successfully!');
+          showToast('Reconnected. Resuming transfer...');
         }
       });
     }
@@ -1458,17 +1474,18 @@
 
     function renderSendQueuePreview() {
       if (!els.sendQueuePreview) return;
-      if (!stagedFiles.length) {
+      if (!fileQueue.length) {
         els.sendQueuePreview.innerHTML = '<div style="font-size:12px;color:#7b8a9e;padding:6px 0;">Waiting for receiver to connect...</div>';
         return;
       }
-      els.sendQueuePreview.innerHTML = stagedFiles.map(f =>
+      els.sendQueuePreview.innerHTML = fileQueue.map(f =>
         `<div class="queue-item"><span class="queue-item-name">${escapeHtml(f.name)}</span><span class="queue-item-size">${formatBytes(f.size)}</span></div>`
       ).join('');
     }
 
     function openReceiveView() {
       isSender = false;
+      isTransferring = false;
       showView('view-receive');
       setupOtpInputs();
       if (!peer || peer.destroyed) {
@@ -1500,7 +1517,7 @@
       const btn = els.btnConnect || document.getElementById('btn-connect');
       if (btn) {
         btn.disabled = false;
-        btn.textContent = 'Connect & Continue (Enter)';
+        btn.textContent = 'Connect & Receive (Enter)';
       }
     }
 
@@ -1518,6 +1535,8 @@
             inputs[idx - 1].focus();
           }
           if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
             let fullCode = '';
             inputs.forEach(i => fullCode += i.value);
             if (/^\d{6}$/.test(fullCode) && els.btnConnect && !els.btnConnect.disabled) {
@@ -1558,6 +1577,7 @@
 
       isCancelled = false;
       isSender = false;
+      isTransferring = false;
       sessionCode = targetCode;
       hasConnectedOnce = false;
       reconnectAttempts = 0;
@@ -1612,6 +1632,7 @@
 
     function clearStagedFiles() {
       stagedFiles = [];
+      if (els.connectedFileInput) els.connectedFileInput.value = '';
       updateConnectedStagedView();
     }
 
@@ -1658,6 +1679,7 @@
       fileQueue = [...stagedFiles];
       currentBatchTotal = fileQueue.length;
       currentFileIndex = 0;
+      isSender = true;
 
       beginNextFileInQueue();
     }
@@ -1667,7 +1689,7 @@
       isReconnecting = true;
       uiState.status = 'Connection lost. Waiting to reconnect...';
       scheduleUiUpdate();
-      showToast('Connection interrupted. Waiting for the other device...');
+      showToast('Connection interrupted. Waiting for receiver...');
 
       clearReconnectTimers();
       reconnectGiveUpTimer = setTimeout(() => {
@@ -1713,7 +1735,7 @@
     }
 
     function bindPeerConnection(c) {
-      c.on('open', () => {
+      const handleOpen = () => {
         if (isCancelled) return;
         clearReconnectTimers();
         hasConnectedOnce = true;
@@ -1726,9 +1748,18 @@
           try { dc.binaryType = 'arraybuffer'; } catch (_) {}
         }
 
-        goToConnectedScreen();
-        showToast('Connected!');
-      });
+        if (isSender && fileQueue.length > 0 && !batchFullyDone) {
+          beginNextFileInQueue();
+        } else if (!isSender && !isTransferring) {
+          showToast('Connected! Waiting for sender...');
+        }
+      };
+
+      if (c.open) {
+        handleOpen();
+      } else {
+        c.on('open', handleOpen);
+      }
 
       c.on('data', (data) => {
         if (isCancelled) return;
@@ -1764,6 +1795,7 @@
           }
 
           if (msg.type === 'FILE_START') {
+            isTransferring = true;
             receiverBatchIndex++;
             receiverMeta = {
               name: (msg.name || 'file').replace(/[/\\:*?"<>|]/g, '_').slice(0, 255),
@@ -1810,6 +1842,7 @@
             receiverMeta = null;
 
             if (isBatchFinished) {
+              isTransferring = false;
               showBatchComplete(receiverBatchCount, false);
             }
             return;
@@ -1863,6 +1896,7 @@
 
     async function beginNextFileInQueue() {
       if (isCancelled || !conn || !conn.open) return;
+      isTransferring = true;
 
       if (currentFileIndex === 0) {
         try {
@@ -1873,6 +1907,7 @@
       if (currentFileIndex >= fileQueue.length) {
         stagedFiles = [];
         updateConnectedStagedView();
+        isTransferring = false;
         showBatchComplete(currentBatchTotal, true);
         return;
       }
@@ -2054,6 +2089,7 @@
 
     function showBatchComplete(count, roleIsSender) {
       batchFullyDone = true;
+      isTransferring = false;
       uiState.isComplete = true;
       uiState.status = 'Delivered';
       scheduleUiUpdate();
@@ -2069,10 +2105,22 @@
       if (els.completionActions) els.completionActions.classList.remove('hidden');
 
       if (els.completionTitle) {
-        els.completionTitle.textContent = count > 1 ? `${count} Files Sent!` : 'Transfer Complete!';
+        if (count > 1) {
+          els.completionTitle.textContent = roleIsSender ? `${count} Files Sent!` : `${count} Files Received!`;
+        } else {
+          els.completionTitle.textContent = 'Transfer Complete!';
+        }
       }
       if (els.completionSub) {
         els.completionSub.textContent = roleIsSender ? 'Delivered to receiver.' : 'Saved directly to your device.';
+      }
+
+      if (els.btnReturnDropzone) {
+        if (roleIsSender) {
+          els.btnReturnDropzone.classList.remove('hidden');
+        } else {
+          els.btnReturnDropzone.classList.add('hidden');
+        }
       }
     }
 
@@ -2105,8 +2153,6 @@
     }
 
     window.addEventListener('keydown', (e) => {
-      const activeEl = document.activeElement;
-      const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
       const devModal = document.getElementById('dev-info-modal');
 
       if (e.key === 'Escape') {
@@ -2115,12 +2161,6 @@
           closeDevInfo();
           return;
         }
-        e.preventDefault();
-        cancelAndReset();
-        return;
-      }
-
-      if (e.key === 'Backspace' && !isInput) {
         e.preventDefault();
         cancelAndReset();
         return;
@@ -2144,17 +2184,10 @@
       }
     });
 
-    window.addEventListener('popstate', () => {
-      if (currentViewId === 'view-connected' || currentViewId === 'view-transfer') {
-        cancelAndReset();
-      } else {
-        navigateHistory(-1);
-      }
-    });
-
     window.addEventListener('DOMContentLoaded', () => {
       initDomElements();
       initDragAndDrop();
+      updateNavArrowState();
 
       const urlParams = new URLSearchParams(window.location.search);
       const autoCode = (urlParams.get('code') || '').replace(/\D/g, '');
